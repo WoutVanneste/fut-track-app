@@ -1,55 +1,46 @@
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import Home from './pages/Home/Home';
-import Games from './pages/Games/Games';
-import Settings from './pages/Settings/Settings';
-import Team from './pages/Team/Team';
+import React, { useState } from 'react';
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword
+} from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import Constants from 'expo-constants';
+import Login from './pages/Authentication/Login';
+import Navigation from './pages/Navigation';
 
-const Tab = createBottomTabNavigator();
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: Constants.manifest.extra.apiKey,
+  authDomain: Constants.manifest.extra.authDomain,
+  projectId: Constants.manifest.extra.projectId,
+  storageBucket: Constants.manifest.extra.storageBucket,
+  messagingSenderId: Constants.manifest.extra.messagingSenderId,
+  appId: Constants.manifest.extra.appId
+};
 
-export default function App() {
+initializeApp(firebaseConfig);
+
+const auth = getAuth();
+
+const App = () => {
+  const [authenticated, setAuthenticated] = useState(false)
+
+  onAuthStateChanged(auth, user => {
+    if (user != null) {
+      console.log('We are authenticated now!');
+      setAuthenticated(true)
+    }
+  });
+
+  if (!authenticated) {
+    return (
+      <Login loginUser={signInWithEmailAndPassword} auth={auth}/>
+    );
+  }
+
   return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen 
-          name="Home"
-          component={Home}
-          options={{
-            title: 'Overview',
-            tabBarIcon: () => {
-              return <SimpleLineIcon name="trophy" color="#000"/>;
-            }
-          }} />
-        <Tab.Screen 
-          name="Games"
-          component={Games}
-          options={{
-            tabBarIcon: () => {
-              return <SimpleLineIcon name="game-controller" color="#000"/>;
-            }
-          }} />
-        <Tab.Screen 
-          name="Team"
-          component={Team}
-          options={{
-            title: "Team",
-            tabBarIcon: () => {
-              return <SimpleLineIcon name="people" color="#000"/>;
-            }
-          }} />
-        <Tab.Screen 
-          name="Settings"
-          component={Settings}
-          options={{
-            title: "Settings",
-            tabBarIcon: () => {
-              return <SimpleLineIcon name="settings" color="#000"/>;
-            }
-          }}/>
-      </Tab.Navigator>
-    </NavigationContainer>
-    
+    <Navigation/>
   );
 }
+export default App;
