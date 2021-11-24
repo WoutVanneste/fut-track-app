@@ -9,7 +9,8 @@ import Team from './Team/Team';
 
 const Tab = createBottomTabNavigator();
 
-const Navigation = () => {
+const Navigation = (user) => {
+    console.log('navigation comp - user:', user);
     return  <NavigationContainer>
     <Tab.Navigator>
       <Tab.Screen 
@@ -20,7 +21,8 @@ const Navigation = () => {
           tabBarIcon: () => {
             return <SimpleLineIcon name="trophy" color="#000"/>;
           }
-        }} />
+        }}
+        initialParams={user} />
       <Tab.Screen 
         name="Games"
         component={Games}

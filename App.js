@@ -28,7 +28,7 @@ const App = () => {
 
   onAuthStateChanged(auth, user => {
     if (user != null) {
-      console.log('We are authenticated now!');
+      console.log('We are authenticated now!', user);
       setAuthenticated(true)
     }
   });
@@ -40,7 +40,7 @@ const App = () => {
   }
 
   return (
-    <Navigation/>
+    <Navigation user={user}/>
   );
 }
 export default App;

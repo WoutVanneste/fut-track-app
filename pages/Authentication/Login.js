@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { View, TextInput, Button } from 'react-native';
 
 const Login = ({loginUser, auth}) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    return <div>
-        <input type="email" value={email} onChange={e => setEmail(e.currentTarget.value)} />
-        <input type="password" value={password} onChange={e => setPassword(e.currentTarget.value)} />
-        <button onClick={() => loginUser(auth, email, password)}>Login</button>
-        {/* Add register button */}
-    </div>;
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    return <View>
+        <TextInput style={{marginTop: '10px'}} value={email} placeholder="Your email" onChangeText={setEmail} />
+        <TextInput style={{marginTop: '10px'}} secureTextEntry={true} value={password} onChangeText={setPassword} />
+        <Button title="Login" onPress={() => loginUser(auth, email, password)}/>
+    </View>;
 }
 
 export default Login;
