@@ -5,9 +5,11 @@ import { View } from 'react-native';
 const Home = ({ user }) => {
     const [allTimeGames, setAllTimeGames] = useState([]);
     const [allTimePlayerStats, setAllTimePlayerStats] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
+            setLoading(true);
             try {
                 const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-all-time-games`);
                 setAllTimeGames(jsonValue != null ? JSON.parse(jsonValue) : []);
@@ -20,6 +22,7 @@ const Home = ({ user }) => {
             } catch(e) {
                 console.error('Error getting all time player stats', e);
             }
+            setLoading(false);
         }
         getData();
     }, []);
@@ -28,7 +31,7 @@ const Home = ({ user }) => {
         if (allTimeGames.length > 0) {
             return <p>games here</p>
         } else {
-            return <p>add your first game</p>
+            return <p>No data found for your club. Add a team and your first game to see the stats!</p>
         }
     }
 
@@ -60,6 +63,10 @@ const Home = ({ user }) => {
         if (allTimeGames.length > 0) {
             return <p>general stats here</p>
         }
+    }
+
+    if (loading) {
+        return <p>Loading...</p>
     }
 
     return <View>
