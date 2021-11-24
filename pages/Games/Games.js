@@ -30,19 +30,19 @@ const Games = ({ user }) => {
 
     const renderGames = () => {
         if (allTimeGames.length > 0) {
-            return <p>game data here</p>
+            return <p>game data here</p>;
         } else {
-            return <p>No games played so far.</p>
+            return <p>No games played so far.</p>;
         }
-    }
+    };
 
     // Return statements
     if (loading) {
-        return <p>Loading...</p>
+        return <p>Loading...</p>;
     }
 
     if (addingGame) {
-        return <AddGame />
+        return <AddGame />;
     } else {
         return (
             <View>

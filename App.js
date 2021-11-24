@@ -39,10 +39,11 @@ const App = () => {
     return (
       <Login loginUser={signInWithEmailAndPassword} auth={auth}/>
     );
-  }
+  };
 
   return (
     <Navigation user={user}/>
   );
 }
+
 export default App;

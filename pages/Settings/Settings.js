@@ -7,7 +7,13 @@ const Settings = ({ user }) => {
     const removeData = async () => {
         setIsDeleting(true);
         try {
-            const dataKeys = [`user-${user.uid}-all-time-games`, `user-${user.uid}-all-time-player-stats`, `user-${user.uid}-team`, `user-${user.uid}-subs`, `user-${user.uid}-player-list`]
+            const dataKeys = [
+                `user-${user.uid}-all-time-games`,
+                `user-${user.uid}-all-time-player-stats`,
+                `user-${user.uid}-team`,
+                `user-${user.uid}-subs`,
+                `user-${user.uid}-player-list`
+            ];
             await AsyncStorage.multiRemove(dataKeys);
         } catch (e) {
             console.error('Removing club data failed', e);
@@ -17,7 +23,7 @@ const Settings = ({ user }) => {
 
     // Return statements
     if (isDeleting) {
-        return <p>Deleting club data...</p>
+        return <p>Deleting club data...</p>;
     }
 
     return (

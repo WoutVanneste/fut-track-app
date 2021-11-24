@@ -30,12 +30,12 @@ const Team = ({ user }) => {
     }, []);
 
     const renderTeam = () => {
-        return <p>Team here</p>
+        return <p>Team here</p>;
     }
 
     // Return statements
     if (loading) {
-        return <p>Loading...</p>
+        return <p>Loading...</p>;
     }
 
     if (showingStats) {
@@ -45,7 +45,7 @@ const Team = ({ user }) => {
             <View>
                 {renderTeam()}
             </View>
-        )
+        );
     }
 }
 

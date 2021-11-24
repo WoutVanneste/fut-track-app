@@ -29,59 +29,61 @@ const Home = ({ user }) => {
 
     const renderOverview = () => {
         if (allTimeGames.length > 0) {
-            return <p>games here</p>
+            return <p>games here</p>;
         } else {
-            return <p>No data found for your club. Add a team and your first game to see the stats!</p>
+            return <p>No data found for your club. Add a team and your first game to see the stats!</p>;
         }
-    }
+    };
 
     const renderMostGoals = () => {
         if (allTimePlayerStats.length > 0) {
-            return <p>most goals here</p>
+            return <p>most goals here</p>;
         }
-    }
+    };
 
     const renderMostAssists = () => {
         if (allTimePlayerStats.length > 0) {
-            return <p>most assists here</p>
+            return <p>most assists here</p>;
         }
-    }
+    };
     
     const renderGameGoals = () => {
         if (allTimeGames.length > 0) {
             return <p>game-goal ratio</p>
         }
-    }
+    };
 
     const renderLast5Games = () => {
         if (allTimeGames.length > 0) {
-            return <p>last 5 games here</p>
+            return <p>last 5 games here</p>;
         }
-    }
+    };
 
     const renderGeneralStats = () => {
         if (allTimeGames.length > 0) {
-            return <p>general stats here</p>
+            return <p>general stats here</p>;
         }
-    }
+    };
 
     // Return statements
     if (loading) {
-        return <p>Loading...</p>
-    }
+        return <p>Loading...</p>;
+    };
 
-    return <View>
-        {renderOverview()}
+    return (
         <View>
-            {renderMostGoals()}
-            {renderMostAssists()}
+            {renderOverview()}
+            <View>
+                {renderMostGoals()}
+                {renderMostAssists()}
+            </View>
+            {renderGameGoals()}
+            <View>
+                {renderLast5Games()}
+                {renderGeneralStats()}
+            </View>
         </View>
-        {renderGameGoals()}
-        <View>
-            {renderLast5Games()}
-            {renderGeneralStats()}
-        </View>
-    </View>;
+    );
 }
 
 export default Home;

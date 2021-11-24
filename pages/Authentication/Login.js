@@ -4,11 +4,14 @@ import { View, TextInput, Button } from 'react-native';
 const Login = ({loginUser, auth}) => {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
-    return <View>
-        <TextInput style={{marginTop: '10px'}} value={email} placeholder="Your email" onChangeText={setEmail} />
-        <TextInput style={{marginTop: '10px'}} secureTextEntry={true} value={password} onChangeText={setPassword} />
-        <Button title="Login" onPress={() => loginUser(auth, email, password)}/>
-    </View>;
+    
+    return (
+        <View>
+            <TextInput style={{marginTop: '10px'}} value={email} placeholder="Your email" onChangeText={setEmail} />
+            <TextInput style={{marginTop: '10px'}} secureTextEntry={true} value={password} onChangeText={setPassword} />
+            <Button title="Login" onPress={() => loginUser(auth, email, password)}/>
+        </View>
+    );
 }
 
 export default Login;
