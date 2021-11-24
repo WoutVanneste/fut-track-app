@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Settings = () => {
+const Settings = ({ user }) => {
     return <p>Settings page content</p>;
 }
 

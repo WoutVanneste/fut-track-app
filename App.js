@@ -24,10 +24,12 @@ initializeApp(firebaseConfig);
 const auth = getAuth();
 
 const App = () => {
-  const [authenticated, setAuthenticated] = useState(false)
+  const [authenticated, setAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
 
   onAuthStateChanged(auth, user => {
     if (user != null) {
+      setUser(user);
       console.log('We are authenticated now!', user);
       setAuthenticated(true)
     }

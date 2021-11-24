@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Team = () => {
+const Team = ({ user }) => {
     return <p>Team page content</p>;
 }
 
