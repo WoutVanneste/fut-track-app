@@ -65,6 +65,7 @@ const Home = ({ user }) => {
         }
     }
 
+    // Return statements
     if (loading) {
         return <p>Loading...</p>
     }
