@@ -22,7 +22,7 @@ const Navigation = ({ user }) => {
               position: 'absolute',
               elevation: 0,
               backgroundColor: '#3652E7',
-              height: 75,
+              height: 60,
             },
             tabBarActiveBackgroundColor: '#2b41b9'
           }}
@@ -33,7 +33,7 @@ const Navigation = ({ user }) => {
               title: 'Overview',
               tabBarIcon: ({ focused }) => (
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                  <SimpleLineIcon style={{fontSize: 20, marginBottom: 5}} name="trophy" color="#fff"/>
+                  <SimpleLineIcon style={{fontSize: 18, marginBottom: 5}} name="trophy" color="#fff"/>
                   <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>
                 </View>
               )
@@ -45,7 +45,7 @@ const Navigation = ({ user }) => {
             options={{
               tabBarIcon: ({ focused }) => (
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                  <SimpleLineIcon style={{fontSize: 20, marginBottom: 5}} name="game-controller" color="#fff"/>
+                  <SimpleLineIcon style={{fontSize: 18, marginBottom: 5}} name="game-controller" color="#fff"/>
                   <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>
                 </View>
               )
@@ -58,7 +58,7 @@ const Navigation = ({ user }) => {
               title: "Team",
               tabBarIcon: ({ focused }) => (
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                  <SimpleLineIcon style={{fontSize: 20, marginBottom: 5}} name="people" color="#fff"/>
+                  <SimpleLineIcon style={{fontSize: 18, marginBottom: 5}} name="people" color="#fff"/>
                   <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>
                 </View>
               )
@@ -71,7 +71,7 @@ const Navigation = ({ user }) => {
               title: "Settings",
               tabBarIcon: ({ focused }) => (
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <SimpleLineIcon style={{fontSize: 20, marginBottom: 5}} name="settings" color="#fff"/>
+                <SimpleLineIcon style={{fontSize: 18, marginBottom: 5}} name="settings" color="#fff"/>
                 <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>
               </View>
               )
