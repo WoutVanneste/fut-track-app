@@ -6,6 +6,7 @@ import Home from './Home/Home';
 import Games from './Games/Games';
 import Settings from './Settings/Settings';
 import Team from './Team/Team';
+import { View, Text } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -14,24 +15,40 @@ const Navigation = ({ user }) => {
     return (
       <NavigationContainer>
         <Tab.Navigator
-          screenOptions={{headerShown: false}}
+          screenOptions={{
+            headerShown: false,
+            tabBarShowLabel: false,
+            tabBarStyle: {
+              position: 'absolute',
+              elevation: 0,
+              backgroundColor: '#3652E7',
+              height: 75,
+            },
+            tabBarActiveBackgroundColor: '#2b41b9'
+          }}
         >
           <Tab.Screen 
             name="Home"
             options={{
               title: 'Overview',
-              tabBarIcon: () => {
-                return <SimpleLineIcon name="trophy" color="#000"/>;
-              }
+              tabBarIcon: ({ focused }) => (
+                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                  <SimpleLineIcon style={{fontSize: 20, marginBottom: 5}} name="trophy" color="#fff"/>
+                  <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>
+                </View>
+              )
             }}>
               {props => <Home {...props} user={user} />}
           </Tab.Screen>
           <Tab.Screen 
             name="Games"
             options={{
-              tabBarIcon: () => {
-                return <SimpleLineIcon name="game-controller" color="#000"/>;
-              }
+              tabBarIcon: ({ focused }) => (
+                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                  <SimpleLineIcon style={{fontSize: 20, marginBottom: 5}} name="game-controller" color="#fff"/>
+                  <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>
+                </View>
+              )
             }}>
               {props => <Games {...props} user={user}/>}
           </Tab.Screen>
@@ -39,9 +56,12 @@ const Navigation = ({ user }) => {
             name="Team"
             options={{
               title: "Team",
-              tabBarIcon: () => {
-                return <SimpleLineIcon name="people" color="#000"/>;
-              }
+              tabBarIcon: ({ focused }) => (
+                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                  <SimpleLineIcon style={{fontSize: 20, marginBottom: 5}} name="people" color="#fff"/>
+                  <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>
+                </View>
+              )
             }}>
               {props => <Team {...props} user={user}/>}
           </Tab.Screen>
@@ -49,9 +69,12 @@ const Navigation = ({ user }) => {
             name="Settings"
             options={{
               title: "Settings",
-              tabBarIcon: () => {
-                return <SimpleLineIcon name="settings" color="#000"/>;
-              }
+              tabBarIcon: ({ focused }) => (
+                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <SimpleLineIcon style={{fontSize: 20, marginBottom: 5}} name="settings" color="#fff"/>
+                <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>
+              </View>
+              )
             }}>
               {props => <Settings {...props} user={user}/>}
           </Tab.Screen>
