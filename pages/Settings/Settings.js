@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native';
+import { View, Button, Text } from 'react-native';
+import GeneralStyles from '../../styles/General';
 
 const Settings = ({ user }) => {
     const [isDeleting, setIsDeleting] = useState(false);
@@ -15,6 +16,7 @@ const Settings = ({ user }) => {
                 `user-${user.uid}-player-list`
             ];
             await AsyncStorage.multiRemove(dataKeys);
+            // Show succes message here
         } catch (e) {
             console.error('Removing club data failed', e);
         }
@@ -23,11 +25,11 @@ const Settings = ({ user }) => {
 
     // Return statements
     if (isDeleting) {
-        return <p>Deleting club data...</p>;
+        return <Text style={GeneralStyles.paragraph}>Deleting club data...</Text>;
     }
 
     return (
-        <View>
+        <View style={GeneralStyles.pageContainer}>
             <Button title="Remove club data" onPress={() => removeData()}/>
         </View>
     );

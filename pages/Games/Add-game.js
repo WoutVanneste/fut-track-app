@@ -1,7 +1,9 @@
 import React from 'react';
+import { Text } from 'react-native';
+import GeneralStyles from '../../styles/General';
 
-const AddGame = () => {
-    return <p>Add game</p>;
+const AddGame = ({ allTimePlayerStats, setAllTimePlayerStats }) => {
+    return <Text style={GeneralStyles.paragraph}>Add game</Text>;
 }
 
 export default AddGame;

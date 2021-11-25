@@ -13,7 +13,9 @@ const Navigation = ({ user }) => {
     console.log('navigation comp - user:', user);
     return (
       <NavigationContainer>
-        <Tab.Navigator>
+        <Tab.Navigator
+          screenOptions={{headerShown: false}}
+        >
           <Tab.Screen 
             name="Home"
             options={{

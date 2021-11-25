@@ -30,7 +30,6 @@ const App = () => {
   onAuthStateChanged(auth, user => {
     if (user != null) {
       setUser(user);
-      console.log('We are authenticated now!', user);
       setAuthenticated(true)
     }
   });

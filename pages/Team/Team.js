@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import TeamStats from './Team-stats';
+import GeneralStyles from '../../styles/General';
 
 const Team = ({ user }) => {
     const [team, setTeam] = useState([]);
@@ -30,23 +31,21 @@ const Team = ({ user }) => {
     }, []);
 
     const renderTeam = () => {
-        return <p>Team here</p>;
+        return <Text style={GeneralStyles.paragraph}>Team here</Text>;
     }
 
     // Return statements
     if (loading) {
-        return <p>Loading...</p>;
+        return <Text style={GeneralStyles.paragraph}>Loading...</Text>;
     }
 
-    if (showingStats) {
-        return <TeamStats />
-    } else {
-        return (
-            <View>
-                {renderTeam()}
-            </View>
-        );
-    }
+    return (
+        <View style={GeneralStyles.pageContainer}>
+            {showingStats ?
+            <TeamStats /> :
+            renderTeam()}
+        </View>
+    );
 }
 
 export default Team;

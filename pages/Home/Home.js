@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
+import GeneralStyles from '../../styles/General';
 
 const Home = ({ user }) => {
     const [allTimeGames, setAllTimeGames] = useState([]);
@@ -29,49 +30,49 @@ const Home = ({ user }) => {
 
     const renderOverview = () => {
         if (allTimeGames.length > 0) {
-            return <p>games here</p>;
+            return <Text style={GeneralStyles.paragraph}>games here</Text>;
         } else {
-            return <p>No data found for your club. Add a team and your first game to see the stats!</p>;
+            return <Text style={GeneralStyles.paragraph}>No data found for your club. Add a team and your first game to see the stats!</Text>;
         }
     };
 
     const renderMostGoals = () => {
         if (allTimePlayerStats.length > 0) {
-            return <p>most goals here</p>;
+            return <Text style={GeneralStyles.paragraph}>most goals here</Text>;
         }
     };
 
     const renderMostAssists = () => {
         if (allTimePlayerStats.length > 0) {
-            return <p>most assists here</p>;
+            return <Text style={GeneralStyles.paragraph}>most assists here</Text>;
         }
     };
     
     const renderGameGoals = () => {
         if (allTimeGames.length > 0) {
-            return <p>game-goal ratio</p>
+            return <Text style={GeneralStyles.paragraph}>game-goal ratio</Text>
         }
     };
 
     const renderLast5Games = () => {
         if (allTimeGames.length > 0) {
-            return <p>last 5 games here</p>;
+            return <Text style={GeneralStyles.paragraph}>last 5 games here</Text>;
         }
     };
 
     const renderGeneralStats = () => {
         if (allTimeGames.length > 0) {
-            return <p>general stats here</p>;
+            return <Text style={GeneralStyles.paragraph}>general stats here</Text>;
         }
     };
 
     // Return statements
     if (loading) {
-        return <p>Loading...</p>;
+        return <Text style={GeneralStyles.paragraph}>Loading...</Text>;
     };
 
     return (
-        <View>
+        <View style={GeneralStyles.pageContainer}>
             {renderOverview()}
             <View>
                 {renderMostGoals()}

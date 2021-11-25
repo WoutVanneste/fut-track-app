@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import AddGame from './Add-game';
+import GeneralStyles from '../../styles/General';
 
 const Games = ({ user }) => {
     const [addingGame, setAddingGame] = useState(false);
     const [allTimeGames, setAllTimeGames] = useState([]);
+    const [allTimePlayerStats, setAllTimePlayerStats] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -30,26 +32,25 @@ const Games = ({ user }) => {
 
     const renderGames = () => {
         if (allTimeGames.length > 0) {
-            return <p>game data here</p>;
+            return <Text style={GeneralStyles.paragraph}>game data here</Text>;
         } else {
-            return <p>No games played so far.</p>;
+            return <Text style={GeneralStyles.paragraph}>No games played so far.</Text>;
         }
     };
 
     // Return statements
     if (loading) {
-        return <p>Loading...</p>;
+        return <Text style={GeneralStyles.paragraph}>Loading...</Text>;
     }
 
-    if (addingGame) {
-        return <AddGame />;
-    } else {
-        return (
-            <View>
-                {renderGames()}
-            </View>
-        );
-    }
+  
+    return (
+        <View style={GeneralStyles.pageContainer}>
+            {addingGame ? 
+            <AddGame allTimePlayerStats={allTimePlayerStats} setAllTimePlayerStats={setAllTimePlayerStats} /> : 
+            renderGames()}
+        </View>
+    );
 }
 
 export default Games;
