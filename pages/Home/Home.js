@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView, Text, View, Image } from 'react-native';
+import { ScrollView, Text, View, Image, ImageBackground } from 'react-native';
 import GeneralStyles from '../../styles/General';
+import HomeStyles from '../../styles/Home';
 import styled from 'styled-components/native';
 import { games, allTimeStats } from '../../data';
 
@@ -99,16 +100,16 @@ const Home = ({ user }) => {
                     break;
                 }
             });
-            return <View>
-                <View>
-                    <Text style={GeneralStyles.paragraph}>{wins}</Text>
-                </View>
-                <View>
-                    <Text style={GeneralStyles.paragraph}>{draws}</Text>
-                </View>
-                <View>
-                    <Text style={GeneralStyles.paragraph}>{losses}</Text>
-                </View>
+            return <View style={HomeStyles.recordWrapper}>
+                <ImageBackground resizeMode="contain" style={HomeStyles.imageBackground} source={require('../../assets/images/green-up-single.png')}>
+                    <Text style={HomeStyles.winsText}>{wins}</Text>
+                </ImageBackground>
+                <ImageBackground resizeMode="contain" style={HomeStyles.imageBackground} source={require('../../assets/images/blue-down-single.png')}>
+                    <Text style={HomeStyles.drawsText}>{draws}</Text>
+                </ImageBackground>
+                <ImageBackground resizeMode="contain" style={[HomeStyles.imageBackground, HomeStyles.imageBackgroundLast]} source={require('../../assets/images/red-right-single.png')}>
+                    <Text style={HomeStyles.lossesText}>{losses}</Text>
+                </ImageBackground>
             </View>
         }
     };
