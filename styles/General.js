@@ -21,6 +21,13 @@ const GeneralStyles = StyleSheet.create({
     color: '#ffffff',
     fontFamily: 'Rationale_400Regular',
     fontSize: 16
+  },
+  topContainer: {
+    marginBottom: 25,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row'
   }
 });
 
