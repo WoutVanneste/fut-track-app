@@ -68,12 +68,13 @@ const AddGame = ({ allTimePlayerStats, setAllTimePlayerStats }) => {
 
     // Render methods
     const renderTeam = () => {
-        let newList = team.concat(subs);
+        let fullTeam = team.concat(subs);
         return <FlatList 
-        data={newList}
+        data={fullTeam}
         contentContainerStyle={{paddingBottom: 125}}
-        renderItem={(teamPlayer) => (
-            <View key={teamPlayer.item.id}>
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={(teamPlayer, index) => (
+            <View key={index}>
                 <View>
                     {!teamPlayer.item.isStarting ?
                      <TouchableOpacity onPress={() => setPlayerActive(teamPlayer.item)}>

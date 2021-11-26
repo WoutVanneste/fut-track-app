@@ -38,6 +38,7 @@ const Games = ({ user }) => {
             const sortedGames = allTimeGames.sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime))
             return <FlatList
                 data={sortedGames}
+                keyExtractor={(item, index) => index.toString()}
                 renderItem={(game, key) => {
                     return <View key={key}>
                         <Text style={GeneralStyles.paragraph}>{game.item.goalsScored} - {game.item.goalsConceded}</Text>

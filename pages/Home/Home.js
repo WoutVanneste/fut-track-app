@@ -6,7 +6,7 @@ import styled from 'styled-components/native';
 import { games, allTimeStats } from '../../data';
 
 const StyledBar = styled.View`
-    height: 30;
+    height: 30px;
     width: ${props => props.width}%;
     backgroundColor: ${props => props.isGoalsScored ? "#C2F655" : "#8B0617"};
     position: relative;
@@ -17,11 +17,11 @@ const StyledBar = styled.View`
         left: 0;
         color: #242834;
         justifyContent: flex-start;
-        paddingLeft: 25;` :
+        paddingLeft: 25px;` :
         `
         right: 0;
         justifyContent: flex-end;
-        paddingRight: 25;`
+        paddingRight: 25px;`
     }
 `;
 
@@ -29,12 +29,12 @@ const StyledBarScored = styled.View`
     width: 0;
     height: 0;
     borderStyle: solid;
-    borderTopWidth: 15;
-    borderRightWidth: 26;
-    borderBottomWidth: 15;
-    borderLeftWidth: 0;
+    borderTopWidth: 15px;
+    borderRightWidth: 26px;
+    borderBottomWidth: 15px;
+    borderLeftWidth: 0px;
     position: absolute;
-    left: -26;
+    left: -26px;
     borderTopColor: transparent;
     borderRightColor: #C2F655;
     borderBottomColor: transparent;
@@ -45,12 +45,12 @@ const StyledBarConceded = styled.View`
     width: 0;
     height: 0;
     borderStyle: solid;
-    borderTopWidth: 15;
-    borderRightWidth: 0;
-    borderBottomWidth: 15;
-    borderLeftWidth: 26;
+    borderTopWidth: 15px;
+    borderRightWidth: 0px;
+    borderBottomWidth: 15px;
+    borderLeftWidth: 26px;
     position: absolute;
-    right: -26;
+    right: -26px;
     borderTopColor: transparent;
     borderRightColor: transparent;
     borderBottomColor: transparent;
