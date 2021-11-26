@@ -23,6 +23,8 @@ const Navigation = ({ user }) => {
               elevation: 0,
               backgroundColor: '#3652E7',
               height: 60,
+              borderWidth: 0,
+              borderTopWidth: 0
             },
             tabBarActiveBackgroundColor: '#2b41b9'
           }}
@@ -31,7 +33,7 @@ const Navigation = ({ user }) => {
             name="Home"
             options={{
               title: 'Overview',
-              tabBarIcon: ({ focused }) => (
+              tabBarIcon: () => (
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
                   <SimpleLineIcon style={{fontSize: 18, marginBottom: 5}} name="trophy" color="#fff"/>
                   <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>
@@ -43,7 +45,7 @@ const Navigation = ({ user }) => {
           <Tab.Screen 
             name="Games"
             options={{
-              tabBarIcon: ({ focused }) => (
+              tabBarIcon: () => (
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
                   <SimpleLineIcon style={{fontSize: 18, marginBottom: 5}} name="game-controller" color="#fff"/>
                   <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>
@@ -56,7 +58,7 @@ const Navigation = ({ user }) => {
             name="Team"
             options={{
               title: "Team",
-              tabBarIcon: ({ focused }) => (
+              tabBarIcon: () => (
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
                   <SimpleLineIcon style={{fontSize: 18, marginBottom: 5}} name="people" color="#fff"/>
                   <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>
@@ -69,7 +71,7 @@ const Navigation = ({ user }) => {
             name="Settings"
             options={{
               title: "Settings",
-              tabBarIcon: ({ focused }) => (
+              tabBarIcon: () => (
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 <SimpleLineIcon style={{fontSize: 18, marginBottom: 5}} name="settings" color="#fff"/>
                 <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>

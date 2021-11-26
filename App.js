@@ -8,6 +8,11 @@ import { initializeApp } from 'firebase/app';
 import Constants from 'expo-constants';
 import Login from './pages/Authentication/Login';
 import Navigation from './pages/Navigation';
+import {
+  useFonts,
+  Rationale_400Regular,
+} from '@expo-google-fonts/rationale';
+import { Text } from 'react-native';
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -27,12 +32,20 @@ const App = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
 
+  let [fontsLoaded] = useFonts({
+    Rationale_400Regular,
+  });
+
   onAuthStateChanged(auth, user => {
     if (user != null) {
       setUser(user);
       setAuthenticated(true)
     }
   });
+
+  if (!fontsLoaded) {
+    return <Text>Loading styles...</Text>
+  }
 
   if (!authenticated) {
     return (
