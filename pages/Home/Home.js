@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View, Image } from 'react-native';
 import GeneralStyles from '../../styles/General';
 import styled from 'styled-components/native';
 import { games, allTimeStats } from '../../data';
@@ -100,7 +100,7 @@ const Home = ({ user }) => {
                 </View>
                 <View>
                     <Text style={GeneralStyles.paragraph}>{losses}</Text>
-                </View>    
+                </View>
             </View>
         }
     };
@@ -121,7 +121,7 @@ const Home = ({ user }) => {
                 const goalsPerGame = Math.round(topPlayer.goals/topPlayer.games * 10) / 10;
                 return <View>
                     <Text style={GeneralStyles.paragraph}>Goals</Text>
-                    <img alt={topPlayer.name} src={topPlayer.image} />
+                    <Image  source={{uri: topPlayer.image}} style={{width: 100, height: 100, resizeMode: 'contain'}} />
                     <Text style={GeneralStyles.paragraph}>{topPlayer.name.length > 20 ? topPlayer.name.substring(0, 20) + "..." : topPlayer.name}</Text>
                     <Text style={GeneralStyles.paragraph}>{topPlayer.goals} goals</Text>
                     <Text style={GeneralStyles.paragraph}>{goalsPerGame} goals / game</Text>
@@ -146,7 +146,7 @@ const Home = ({ user }) => {
                 const assistsPerGame = Math.round(topPlayer.assists/topPlayer.games * 10) / 10;
                 return <View>
                     <Text style={GeneralStyles.paragraph}>Assists</Text>
-                    <img alt={topPlayer.name} src={topPlayer.image} />
+                    <Image  source={{uri: topPlayer.image}} style={{width: 100, height: 100, resizeMode: 'contain'}} />
                     <Text style={GeneralStyles.paragraph}>{topPlayer.name.length > 20 ? topPlayer.name.substring(0, 20) + "..." : topPlayer.name}</Text>
                     <Text style={GeneralStyles.paragraph}>{topPlayer.assists} assists</Text>
                     <Text style={GeneralStyles.paragraph}>{assistsPerGame} assists / game</Text>
