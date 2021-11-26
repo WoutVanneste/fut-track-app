@@ -128,7 +128,7 @@ const Home = ({ user }) => {
             let topPlayer = sortedPlayers[0];
             if (topPlayer) {
                 const goalsPerGame = Math.round(topPlayer.goals/topPlayer.games * 10) / 10;
-                return <View>
+                return <View style={[HomeStyles.topGoalsAssists, HomeStyles.topGoals]}>
                     <Text style={GeneralStyles.paragraph}>Goals</Text>
                     <Image  source={{uri: topPlayer.image}} style={{width: 100, height: 100, resizeMode: 'contain'}} />
                     <Text style={GeneralStyles.paragraph}>{topPlayer.name.length > 20 ? topPlayer.name.substring(0, 20) + "..." : topPlayer.name}</Text>
@@ -153,7 +153,7 @@ const Home = ({ user }) => {
             let topPlayer = sortedPlayers[0];
             if (topPlayer) {
                 const assistsPerGame = Math.round(topPlayer.assists/topPlayer.games * 10) / 10;
-                return <View>
+                return <View style={[HomeStyles.topGoalsAssists, HomeStyles.topAssists]}>
                     <Text style={GeneralStyles.paragraph}>Assists</Text>
                     <Image  source={{uri: topPlayer.image}} style={{width: 100, height: 100, resizeMode: 'contain'}} />
                     <Text style={GeneralStyles.paragraph}>{topPlayer.name.length > 20 ? topPlayer.name.substring(0, 20) + "..." : topPlayer.name}</Text>
@@ -273,7 +273,7 @@ const Home = ({ user }) => {
             </View>
             {allTimeGames.length > 0 && allTimePlayerStats.length > 0 ?
             <View>
-                <View>
+                <View style={HomeStyles.topGoalsAssistsWrapper}>
                     {renderMostGoals()}
                     {renderMostAssists()}
                 </View>

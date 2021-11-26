@@ -43,6 +43,21 @@ const HomeStyles = StyleSheet.create({
         justifyContent: "space-between",
         flexDirection: "row",
         alignItems: "center"
+    },
+    topGoalsAssistsWrapper : {
+        display: "flex",
+        justifyContent: "space-between",
+        flexDirection: "row"
+    },
+    topGoalsAssists: {
+        display: "flex",
+        flexDirection: "column"
+    },
+    topGoals: {
+        alignItems: "flex-start"
+    },
+    topAssists: {
+        alignItems: "flex-end"
     }
 });
 
