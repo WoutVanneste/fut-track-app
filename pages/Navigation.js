@@ -48,7 +48,7 @@ const Navigation = ({ user }) => {
               tabBarIcon: () => (
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
                   <SimpleLineIcon style={{fontSize: 18, marginBottom: 5}} name="game-controller" color="#fff"/>
-                  <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>
+                  <Text style={{fontSize: 12.5, color: '#fff'}}>Games</Text>
                 </View>
               )
             }}>
@@ -61,7 +61,7 @@ const Navigation = ({ user }) => {
               tabBarIcon: () => (
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
                   <SimpleLineIcon style={{fontSize: 18, marginBottom: 5}} name="people" color="#fff"/>
-                  <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>
+                  <Text style={{fontSize: 12.5, color: '#fff'}}>Team</Text>
                 </View>
               )
             }}>
@@ -74,7 +74,7 @@ const Navigation = ({ user }) => {
               tabBarIcon: () => (
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 <SimpleLineIcon style={{fontSize: 18, marginBottom: 5}} name="settings" color="#fff"/>
-                <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>
+                <Text style={{fontSize: 12.5, color: '#fff'}}>Settings</Text>
               </View>
               )
             }}>
