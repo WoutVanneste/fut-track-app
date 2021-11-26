@@ -2,10 +2,10 @@ import { StyleSheet } from 'react-native';
 
 const GeneralStyles = StyleSheet.create({
   pageContainer: {
-    paddingTop: 20,
+    paddingTop: 35,
     paddingLeft: 12.5,
     paddingRight: 12.5,
-    paddingBottom: 90,
+    paddingBottom: 80,
     backgroundColor: '#242834',
     color: '#ffffff',
     height: '100%',

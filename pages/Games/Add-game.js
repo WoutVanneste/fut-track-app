@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Text, Button, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Button, Image, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import GeneralStyles from '../../styles/General';
 import { team as teamData } from '../../data';
 
@@ -43,23 +43,13 @@ const AddGame = ({ allTimePlayerStats, setAllTimePlayerStats }) => {
     }
 
     const addTeamGoal = player => {
+        // check if sub, check if active, set active if possible
 
     }
     
     const addTeamAssist = player => {
+        // check if sub, check if active, set active if possible
         
-    }
-
-    const addSubGoal = player => {
-
-    }
-    
-    const addSubAssist = player => {
-        
-    }
-
-    const makeSubMotm = player => {
-
     }
 
     const setPlayerActive = player => {
@@ -67,57 +57,41 @@ const AddGame = ({ allTimePlayerStats, setAllTimePlayerStats }) => {
     }
 
     const clearGoalsAssists = player => {
+        // check if sub, check if active, set active if possible
         
     }
-
-    const clearGoalsAssistsSub = player => {
+    
+    const makePlayerMotm = player => {
+        // check if sub, check if active, set active if possible
 
     }
 
     // Render methods
     const renderTeam = () => {
-        const teamItems = team.map((teamPlayer, index) => 
-            <li key={index}>
+        let newList = team.concat(subs);
+        return <FlatList 
+        data={newList}
+        contentContainerStyle={{paddingBottom: 125}}
+        renderItem={(teamPlayer) => (
+            <View key={teamPlayer.item.id}>
                 <View>
-                    <Image source={{ uri: teamPlayer.image }} style={{width: 100, height: 100, resizeMode: 'contain'}} />
+                    {!teamPlayer.item.isStarting ?
+                     <TouchableOpacity onPress={() => setPlayerActive(teamPlayer.item)}>
+                        <Image source={{ uri: teamPlayer.item.image }} style={{width: 100, height: 100, resizeMode: 'contain'}} />
+                    </TouchableOpacity>:
+                    <Image source={{ uri: teamPlayer.item.image }} style={{width: 100, height: 100, resizeMode: 'contain'}} />}
                 </View>
                 <View>
-                    <Text style={GeneralStyles.paragraph}>{teamPlayer.name.length > 20 ? teamPlayer.name.substring(0, 20) + "..." : teamPlayer.name}</Text>
-                    <Button onPress={() => clearGoalsAssists(teamPlayer)} title="x" />
-                    <Button onPress={() => addTeamGoal(teamPlayer)} title={teamPlayer.goals > 0 ? teamPlayer.goals : "G"} />
-                    <Button onPress={() => addTeamAssist(teamPlayer)} title={teamPlayer.assists > 0 ? teamPlayer.assists : "A"} />
+                    <Text style={GeneralStyles.paragraph}>{teamPlayer.item.name.length > 20 ? teamPlayer.item.name.substring(0, 20) + "..." : teamPlayer.item.name}</Text>
+                    <Button onPress={() => clearGoalsAssists(teamPlayer.item)} title="x" />
+                    <Button onPress={() => addTeamGoal(teamPlayer.item)} title={teamPlayer.item.goals > 0 ? teamPlayer.item.goals : "G"} />
+                    <Button onPress={() => addTeamAssist(teamPlayer.item)} title={teamPlayer.item.assists > 0 ? teamPlayer.item.assists : "A"} />
                     {/* Might have to be 2 buttons or so one for active MOTM and one for not active */}
-                    <Button onPress={() => {
-                        setMotm(teamPlayer.id);
-                    }} title="MOTM"/>
+                    <Button onPress={() => makePlayerMotm(teamPlayer.item)} title="MOTM"/>
                 </View>
-            </li>
-        )
-        return <View>{teamItems}</View>;
-    }
-
-    const renderSubs = () => {
-        const subItems = subs.map((subPlayer, index) => 
-            // add check on the active field for subs (different styling) 
-            <li key={index}>
-                <View>
-                    <TouchableOpacity onPress={() => setPlayerActive(subPlayer)}>
-                        <Image source={{ uri: subPlayer.image }} style={{width: 100, height: 100, resizeMode: 'contain'}} />
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <Text style={GeneralStyles.paragraph}>{subPlayer.name.length > 20 ? subPlayer.name.substring(0, 20) + "..." : subPlayer.name}</Text>
-                    <Button onPress={() => clearGoalsAssistsSub(subPlayer)} title="x" />
-                    <Button onPress={() => addSubGoal(subPlayer)} title={subPlayer.goals > 0 ? subPlayer.goals : "G"} />
-                    <Button onPress={() => addSubAssist(subPlayer)} title={subPlayer.assists > 0 ? subPlayer.assists : "A"} />
-                    {/* Might have to be 2 buttons or so one for active MOTM and one for not active */}
-                    <Button onPress={() => {
-                        makeSubMotm(subPlayer);
-                    }} title="MOTM"/>
-                </View>
-            </li>
-        )
-        return <View>{subItems}</View>;
+            </View>
+        )}
+        />;
     }
 
     // Return statements
@@ -126,32 +100,30 @@ const AddGame = ({ allTimePlayerStats, setAllTimePlayerStats }) => {
     }
 
     if (team.length > 0 && subs.length > 0){
-        return (
+        return <View>
             <View>
-                <View>
-                    <Text style={GeneralStyles.paragraph}>Scoreline: 
-                        <Text style={GeneralStyles.paragraph}>{totalGoals}</Text>- 
-                        <Text style={GeneralStyles.paragraph} onPress={() => {
-                            const newAwayGoals = awayGoals + 1;
+            <View>
+                <Text style={GeneralStyles.paragraph}>Scoreline: 
+                    <Text style={GeneralStyles.paragraph}>{totalGoals}</Text>- 
+                    <Text style={GeneralStyles.paragraph} onPress={() => {
+                        const newAwayGoals = awayGoals + 1;
+                        setAwayGoals(newAwayGoals);
+                    }}>{awayGoals}</Text>
+                    {awayGoals > 0 && 
+                    <Button
+                        onPress={() => {
+                            const newAwayGoals = awayGoals - 1;
                             setAwayGoals(newAwayGoals);
-                        }}>{awayGoals}</Text>
-                        {awayGoals > 0 && 
-                        <Button
-                            onPress={() => {
-                                const newAwayGoals = awayGoals - 1;
-                                setAwayGoals(newAwayGoals);
-                            }}
-                            title="-"
-                        />}
-                    </Text>
-                    <Button onPress={submitGame} title="Save game"/>
-                </View>
-                <Text style={GeneralStyles.paragraph}>Team</Text>
-                {renderTeam()}
-                <Text style={GeneralStyles.paragraph}>Subs</Text>
-                {renderSubs()}
+                        }}
+                        title="-"
+                    />}
+                </Text>
+                <Button onPress={submitGame} title="Save game"/>
             </View>
-        )
+            <Text style={GeneralStyles.paragraph}>Team</Text>
+        </View>
+        {renderTeam()}
+        </View>;
     } else {
         return <Text style={GeneralStyles.paragraph}>You don't have any players in your team yet. Create your team and add your first game.</Text>;
     }

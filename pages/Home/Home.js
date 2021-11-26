@@ -6,47 +6,55 @@ import styled from 'styled-components/native';
 import { games, allTimeStats } from '../../data';
 
 const StyledBar = styled.View`
-    display: inline-block;
-    height: 30px;
-    content: "${props => props.width}";
-    width: calc(${props => props.width}% - 25px);
-    background-color: ${props => props.isGoalsScored ? "#C2F655" : "#8B0617"};
+    height: 30;
+    width: ${props => props.width}%;
+    backgroundColor: ${props => props.isGoalsScored ? "#C2F655" : "#8B0617"};
     position: relative;
-    display: inline-flex;
-    align-items: center;
+    display: flex;
+    alignItems: center;
     ${props => props.isGoalsScored ? 
         `
-        left: 0px;
+        left: 0;
         color: #242834;
-        justify-content: flex-start;
-        padding-left: 25px;
-        &::after {
-            content: "";
-            display: inline-block;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 15px 26.0px 15px 0;
-            position: absolute;
-            left: -26px;
-            border-color: transparent #C2F655 transparent transparent;
-        };` :
+        justifyContent: flex-start;
+        paddingLeft: 25;` :
         `
-        right: 0px;
-        justify-content: flex-end;
-        padding-right: 25px;
-        &::after {
-            content: "";
-            display: inline-block;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 15px 0 15px 26.0px;
-            position: absolute;
-            right: -26px;
-            border-color: transparent transparent transparent #8B0617;
-        };`
+        right: 0;
+        justifyContent: flex-end;
+        paddingRight: 25;`
     }
+`;
+
+const StyledBarScored = styled.View`
+    width: 0;
+    height: 0;
+    borderStyle: solid;
+    borderTopWidth: 15;
+    borderRightWidth: 26;
+    borderBottomWidth: 15;
+    borderLeftWidth: 0;
+    position: absolute;
+    left: -26;
+    borderTopColor: transparent;
+    borderRightColor: #C2F655;
+    borderBottomColor: transparent;
+    borderLeftColor: transparent;
+`;
+
+const StyledBarConceded = styled.View`
+    width: 0;
+    height: 0;
+    borderStyle: solid;
+    borderTopWidth: 15;
+    borderRightWidth: 0;
+    borderBottomWidth: 15;
+    borderLeftWidth: 26;
+    position: absolute;
+    right: -26;
+    borderTopColor: transparent;
+    borderRightColor: transparent;
+    borderBottomColor: transparent;
+    borderLeftColor: #8B0617;
 `;
 
 const Home = ({ user }) => {
@@ -182,10 +190,14 @@ const Home = ({ user }) => {
                 </View>
                 <View>
                     <StyledBar isGoalsScored={true} width={totalScored}>
-                        {goalsScored}
+                        <StyledBarScored>
+                            <Text>{goalsScored}</Text>
+                        </StyledBarScored>
                     </StyledBar>
                     <StyledBar isGoalsScored={false} width={totalConceded}>
-                        {goalsConceded}
+                        <StyledBarConceded>
+                            <Text>{goalsConceded}</Text>
+                        </StyledBarConceded>
                     </StyledBar>
                 </View>
             </View>

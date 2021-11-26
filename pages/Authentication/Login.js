@@ -7,8 +7,8 @@ const Login = ({loginUser, auth}) => {
     
     return (
         <View>
-            <TextInput style={{marginTop: '10px'}} value={email} placeholder="Your email" onChangeText={setEmail} />
-            <TextInput style={{marginTop: '10px'}} secureTextEntry={true} value={password} onChangeText={setPassword} />
+            <TextInput style={{marginTop: 10}} value={email} placeholder="Your email" onChangeText={setEmail} />
+            <TextInput style={{marginTop: 10}} secureTextEntry={true} value={password} onChangeText={setPassword} />
             <Button title="Login" onPress={() => loginUser(auth, email, password)}/>
         </View>
     );
