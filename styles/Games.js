@@ -14,6 +14,22 @@ const GameStyles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20
+    },
+    parentScoreLineWrapper: {
+        justifyContent: 'space-between'
+    },
+    parentPlayerFlexbox: {
+        justifyContent: 'space-between'
+    },
+    scoreLineWrapper: {
+        display: "flex",
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    playerFlexbox: {
+        display: "flex",
+        flexDirection: 'row',
+        alignItems: 'center'
     }
 });
 

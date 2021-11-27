@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, Button, Image, TouchableOpacity, FlatList, SafeAreaView, Alert } from 'react-native';
 import GeneralStyles from '../../styles/General';
+import GameStyles from '../../styles/Games';
 
 const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
     const [team, setTeam] = useState([]);
@@ -366,24 +367,24 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
         data={fullTeam}
         contentContainerStyle={{paddingBottom: 125}}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={(teamPlayer, index) => (
-            <View key={index}>
-                <View>
-                    {!teamPlayer.item.isStarting ?
-                     <TouchableOpacity onPress={() => setPlayerActive(teamPlayer.item)}>
-                        <Image source={{ uri: teamPlayer.item.image }} style={GeneralStyles.playerImg} />
+        renderItem={({item, index}) => (
+            <View style={[GameStyles.playerFlexbox, GameStyles.parentPlayerFlexbox]} key={index}>
+                <View style={GameStyles.playerFlexbox}>
+                    {!item.isStarting ?
+                     <TouchableOpacity onPress={() => setPlayerActive(item)}>
+                        <Image source={{ uri: item.image }} style={GeneralStyles.playerImg} />
                     </TouchableOpacity>:
-                    <Image source={{ uri: teamPlayer.item.image }} style={GeneralStyles.playerImg} />}
+                    <Image source={{ uri: item.image }} style={GeneralStyles.playerImg} />}
+                    <Text style={GeneralStyles.paragraph}>{item.name.length > 20 ? item.name.substring(0, 20) + "..." : item.name}</Text>
                 </View>
-                <View>
-                    <Text style={GeneralStyles.paragraph}>{teamPlayer.item.name.length > 20 ? teamPlayer.item.name.substring(0, 20) + "..." : teamPlayer.item.name}</Text>
-                    <Button onPress={() => clearGoalsAssists(teamPlayer.item)} title="x" />
-                    <Button onPress={() => addTeamGoal(teamPlayer.item)} title={teamPlayer.item.goals > 0 ? teamPlayer.item.goals.toString() : "G"} />
-                    <Button onPress={() => addTeamAssist(teamPlayer.item)} title={teamPlayer.item.assists > 0 ? teamPlayer.item.assists.toString() : "A"} />
-                    {teamPlayer.item.id === motm ? 
+                <View style={GameStyles.playerFlexbox}>
+                    {item.goals > 0 || item.assists > 0 && <Button onPress={() => clearGoalsAssists(item)} title="x" />}
+                    <Button onPress={() => addTeamGoal(item)} title={item.goals > 0 ? item.goals.toString() : "G"} />
+                    <Button onPress={() => addTeamAssist(item)} title={item.assists > 0 ? item.assists.toString() : "A"} />
+                    {item.id === motm ? 
                     // Add same styling to view as for the button but with active color
                     <View><Text>Is MOTM</Text></View> :
-                    <Button onPress={() => makePlayerMotm(teamPlayer.item)} title="MOTM"/>}
+                    <Button onPress={() => makePlayerMotm(item)} title="MOTM"/>}
                 </View>
             </View>
         )}
@@ -399,22 +400,26 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
         return <SafeAreaView>
             <View>
             <View>
-                <Text style={GeneralStyles.paragraph}>Scoreline: 
-                    <Text style={GeneralStyles.paragraph}>{totalGoals}</Text>- 
-                    <Text style={GeneralStyles.paragraph} onPress={() => {
-                        const newAwayGoals = awayGoals + 1;
-                        setAwayGoals(newAwayGoals);
-                    }}>{awayGoals}</Text>
-                    {awayGoals > 0 && 
-                    <Button
-                        onPress={() => {
-                            const newAwayGoals = awayGoals - 1;
+                <View style={[GameStyles.scoreLineWrapper, GameStyles.parentScoreLineWrapper]}>
+                    <View style={GameStyles.scoreLineWrapper}>
+                        <Text style={GeneralStyles.paragraph}>Scoreline:</Text>
+                        <Text style={GeneralStyles.paragraph}>{totalGoals}</Text>
+                        <Text style={GeneralStyles.paragraph}>-</Text> 
+                        <Text style={GeneralStyles.paragraph} onPress={() => {
+                            const newAwayGoals = awayGoals + 1;
                             setAwayGoals(newAwayGoals);
-                        }}
-                        title="-"
-                    />}
-                </Text>
-                <Button onPress={submitGame} title="Save game"/>
+                        }}>{awayGoals}</Text>
+                        {awayGoals > 0 && 
+                        <Button
+                            onPress={() => {
+                                const newAwayGoals = awayGoals - 1;
+                                setAwayGoals(newAwayGoals);
+                            }}
+                            title="-"
+                        />}
+                    </View>
+                    <Button onPress={submitGame} title="Save game"/>
+                </View>
             </View>
             <Text style={GeneralStyles.paragraph}>Team</Text>
         </View>
