@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Text, Button, FlatList, SafeAreaView } from 'react-native';
+import { View, Text, Button, FlatList, SafeAreaView, ImageBackground } from 'react-native';
 import AddGame from './Add-game';
 import GeneralStyles from '../../styles/General';
+import GameStyles from '../../styles/Games';
 
 const Games = ({ navigation, user }) => {
     const [addingGame, setAddingGame] = useState(false);
@@ -41,7 +42,16 @@ const Games = ({ navigation, user }) => {
         });
     }, []);
 
-
+    const renderGameIcon = result => {
+        switch (result) {
+            case 1:
+                return <ImageBackground resizeMode="contain" style={GameStyles.imageBackground} source={require('../../assets/images/green-right-single.png')} />;
+            case 2:
+                return <ImageBackground resizeMode="contain" style={GameStyles.imageBackground} source={require('../../assets/images/blue-right-single.png')} />;
+            case 3:
+                return <ImageBackground resizeMode="contain" style={GameStyles.imageBackground} source={require('../../assets/images/red-right-single.png')} />;
+        }
+    }
 
     const renderGames = () => {
         if (allTimeGames.length > 0) {
@@ -50,10 +60,15 @@ const Games = ({ navigation, user }) => {
                 data={sortedGames}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={(game, key) => {
-                    return <View key={key}>
-                        <Text style={GeneralStyles.paragraph}>{game.item.goalsScored} - {game.item.goalsConceded}</Text>
-                        <Text style={GeneralStyles.paragraph}>Date: {new Date(game.item.dateTime).toLocaleString().toString()}</Text>
-                    </View>
+                    return (
+                        <View key={key} style={GameStyles.gameWrapper}>
+                            {renderGameIcon(game.item.result)}
+                            <View>
+                                <Text style={GeneralStyles.paragraph}>{game.item.goalsScored} - {game.item.goalsConceded}</Text>
+                                <Text style={GeneralStyles.paragraph}>Date: {new Date(game.item.dateTime).toLocaleString().toString()}</Text>
+                            </View>
+                        </View>
+                    )
                 }} />
         } else {
             return <Text style={GeneralStyles.paragraph}>No games played so far.</Text>;
@@ -66,7 +81,7 @@ const Games = ({ navigation, user }) => {
     }
 
     return (
-        <SafeAreaView style={GeneralStyles.pageContainer}>
+        <View style={GeneralStyles.pageContainer}>
             <View style={GeneralStyles.topContainer}>
                 <Text style={GeneralStyles.pageTitle}>Games</Text>
                 {addingGame ?
@@ -80,7 +95,7 @@ const Games = ({ navigation, user }) => {
             allTimeGames={allTimeGames}
             user={user} /> :
             renderGames()}
-        </SafeAreaView>
+        </View>
     )
 }
 

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, Button, Image, TouchableOpacity, FlatList, SafeAreaView, Alert } from 'react-native';
 import GeneralStyles from '../../styles/General';
-import { team as teamData } from '../../data';
 
 const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
     const [team, setTeam] = useState([]);
@@ -17,27 +16,27 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
     const [totalActiveSubs, setTotalActiveSubs] = useState(0);
 
     useEffect(() => {
-        // const getData = async () => {
-        //     setLoading(true);
-        //     try {
-        //         const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-team`);
-        //         setTeam(jsonValue != null ? JSON.parse(jsonValue).team : []);
-        //     } catch(e) {
-        //         console.error('Error getting all time games', e);
-        //     }
-        //     try {
-        //         const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-team`);
-        //         setSubs(jsonValue != null ? JSON.parse(jsonValue).subs : []);
-        //     } catch(e) {
-        //         console.error('Error getting all time player stats', e);
-        //     }
-        //     setLoading(false);
-        // }
-        // getData();
-        setTeam(teamData.team);
-        setSubs(teamData.subs);
-        setInitialTeam(teamData.team);
-        setInitialSubs(teamData.subs);
+        const getData = async () => {
+            setLoading(true);
+            try {
+                const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-team`);
+                setTeam(jsonValue != null ? JSON.parse(jsonValue).team : []);
+                setInitialTeam(jsonValue != null ? JSON.parse(jsonValue).team : []);
+                setSubs(jsonValue != null ? JSON.parse(jsonValue).subs : []);
+                setInitialSubs(jsonValue != null ? JSON.parse(jsonValue).subs : []);
+            } catch(e) {
+                console.error('Error getting team', e);
+            }
+            setLoading(false);
+        }
+        getData();
+
+        // Clear any data when leaving the add page
+        return () => {
+            setTeam(initialTeam);
+            setSubs(initialSubs);
+            setAddingGame(false);
+        };
     }, []);
 
     
@@ -362,7 +361,7 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
 
     // Render methods
     const renderTeam = () => {
-        let fullTeam = initialTeam.concat(initialSubs);
+        let fullTeam = team.concat(subs);
         return <FlatList 
         data={fullTeam}
         contentContainerStyle={{paddingBottom: 125}}
@@ -397,7 +396,7 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
     }
 
     if (team.length > 0 && subs.length > 0 && initialTeam.length > 0 && initialSubs.length > 0){
-        return <View>
+        return <SafeAreaView>
             <View>
             <View>
                 <Text style={GeneralStyles.paragraph}>Scoreline: 
@@ -420,7 +419,7 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
             <Text style={GeneralStyles.paragraph}>Team</Text>
         </View>
         {renderTeam()}
-        </View>;
+        </SafeAreaView>;
     } else {
         return <Text style={GeneralStyles.paragraph}>You don't have any players in your team yet. Create your team and add your first game.</Text>;
     }

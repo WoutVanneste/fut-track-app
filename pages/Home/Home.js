@@ -4,7 +4,6 @@ import { ScrollView, Text, View, Image, ImageBackground } from 'react-native';
 import GeneralStyles from '../../styles/General';
 import HomeStyles from '../../styles/Home';
 import styled from 'styled-components/native';
-import { games, allTimeStats } from '../../data';
 
 const StyledBar = styled.View`
     height: 30px;
@@ -35,7 +34,7 @@ const StyledBarScored = styled.View`
     borderBottomWidth: 15px;
     borderLeftWidth: 0px;
     position: absolute;
-    left: -26;
+    left: -26px;
     borderTopColor: transparent;
     borderRightColor: #C2F655;
     borderBottomColor: transparent;
@@ -51,7 +50,7 @@ const StyledBarConceded = styled.View`
     borderBottomWidth: 15px;
     borderLeftWidth: 26px;
     position: absolute;
-    right: -26;
+    right: -26px;
     borderTopColor: transparent;
     borderRightColor: transparent;
     borderBottomColor: transparent;

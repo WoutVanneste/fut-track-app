@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, FlatList, Image, Button } from 'react-native';
 import TeamStats from './Team-stats';
 import GeneralStyles from '../../styles/General';
-import {team as teamData} from '../../data';
 
 const Team = ({ user, navigation }) => {
     const [team, setTeam] = useState([]);
@@ -12,26 +11,21 @@ const Team = ({ user, navigation }) => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        // const getData = async () => {
-        //     setLoading(true);
-        //     try {
-        //         const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-team`);
-        //         setTeam(jsonValue != null ? JSON.parse(jsonValue) : []);
-        //     } catch(e) {
-        //         console.error('Error getting team', e);
-        //     }
-        //     try {
-        //         const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-subs`);
-        //         setSubs(jsonValue != null ? JSON.parse(jsonValue) : []);
-        //     } catch(e) {
-        //         console.error('Error getting subs', e);
-        //     }
-        //     setLoading(false);
-        // }
-        // getData();
+        const getData = async () => {
+            setLoading(true);
+            try {
+                const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-team`);
+                setTeam(jsonValue != null ? JSON.parse(jsonValue).team : []);
+                setSubs(jsonValue != null ? JSON.parse(jsonValue).subs : []);
+            } catch(e) {
+                console.error('Error getting team', e);
+            }
+            setLoading(false);
+        }
+        getData();
 
         navigation.addListener('focus', () => { 
-            // getData();
+            getData();
         });
 
         navigation.addListener('beforeRemove', () => { 
@@ -40,9 +34,6 @@ const Team = ({ user, navigation }) => {
             setShowingStats(false);
             setLoading(false);
         });
-
-        setTeam(teamData.team);
-        setSubs(teamData.subs);
     }, []);
 
     const removeFromTeam = player => {
