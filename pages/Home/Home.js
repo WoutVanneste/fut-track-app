@@ -35,7 +35,7 @@ const StyledBarScored = styled.View`
     borderBottomWidth: 15px;
     borderLeftWidth: 0px;
     position: absolute;
-    left: -26px;
+    left: -26;
     borderTopColor: transparent;
     borderRightColor: #C2F655;
     borderBottomColor: transparent;
@@ -51,38 +51,45 @@ const StyledBarConceded = styled.View`
     borderBottomWidth: 15px;
     borderLeftWidth: 26px;
     position: absolute;
-    right: -26px;
+    right: -26;
     borderTopColor: transparent;
     borderRightColor: transparent;
     borderBottomColor: transparent;
     borderLeftColor: #8B0617;
 `;
 
-const Home = ({ user }) => {
+const Home = ({ user, navigation }) => {
     const [allTimeGames, setAllTimeGames] = useState([]);
     const [allTimePlayerStats, setAllTimePlayerStats] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        // const getData = async () => {
-        //     setLoading(true);
-        //     try {
-        //         const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-all-time-games`);
-        //         setAllTimeGames(jsonValue != null ? JSON.parse(jsonValue) : []);
-        //     } catch(e) {
-        //         console.error('Error getting all time games', e);
-        //     }
-        //     try {
-        //         const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-all-time-player-stats`);
-        //         setAllTimePlayerStats(jsonValue != null ? JSON.parse(jsonValue) : []);
-        //     } catch(e) {
-        //         console.error('Error getting all time player stats', e);
-        //     }
-        //     setLoading(false);
-        // }
-        // getData();
-        setAllTimeGames(games);
-        setAllTimePlayerStats(allTimeStats)
+        const getData = async () => {
+            setLoading(true);
+            try {
+                const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-all-time-games`);
+                setAllTimeGames(jsonValue != null ? JSON.parse(jsonValue) : []);
+            } catch(e) {
+                console.error('Error getting all time games', e);
+            }
+            try {
+                const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-all-time-player-stats`);
+                setAllTimePlayerStats(jsonValue != null ? JSON.parse(jsonValue) : []);
+            } catch(e) {
+                console.error('Error getting all time player stats', e);
+            }
+            setLoading(false);
+        }
+        getData();
+        navigation.addListener('focus', () => { 
+            getData();
+        });
+
+        navigation.addListener('beforeRemove', () => { 
+            setAllTimeGames([]);
+            setAllTimePlayerStats([]);
+            setLoading(false);
+         });
     }, []);
 
     const renderRecord = () => {
@@ -129,11 +136,11 @@ const Home = ({ user }) => {
             if (topPlayer) {
                 const goalsPerGame = Math.round(topPlayer.goals/topPlayer.games * 10) / 10;
                 return <View style={[HomeStyles.topGoalsAssists, HomeStyles.topGoals]}>
-                    <Text style={GeneralStyles.paragraph}>Goals</Text>
-                    <Image  source={{uri: topPlayer.image}} style={{width: 100, height: 100, resizeMode: 'contain'}} />
-                    <Text style={GeneralStyles.paragraph}>{topPlayer.name.length > 20 ? topPlayer.name.substring(0, 20) + "..." : topPlayer.name}</Text>
-                    <Text style={GeneralStyles.paragraph}>{topPlayer.goals} goals</Text>
-                    <Text style={GeneralStyles.paragraph}>{goalsPerGame} goals / game</Text>
+                    <Text style={HomeStyles.subTitleGoalAssist}>Goals</Text>
+                    <Image  source={{uri: topPlayer.image}} style={HomeStyles.playerImg} />
+                    <Text style={HomeStyles.homeText}>{topPlayer.name.length > 20 ? topPlayer.name.substring(0, 20) + "..." : topPlayer.name}</Text>
+                    <Text style={HomeStyles.homeText}>{topPlayer.goals} goals</Text>
+                    <Text style={HomeStyles.homeText}>{goalsPerGame} goals / game</Text>
                 </View>
             }
         }
@@ -154,11 +161,11 @@ const Home = ({ user }) => {
             if (topPlayer) {
                 const assistsPerGame = Math.round(topPlayer.assists/topPlayer.games * 10) / 10;
                 return <View style={[HomeStyles.topGoalsAssists, HomeStyles.topAssists]}>
-                    <Text style={GeneralStyles.paragraph}>Assists</Text>
-                    <Image  source={{uri: topPlayer.image}} style={{width: 100, height: 100, resizeMode: 'contain'}} />
-                    <Text style={GeneralStyles.paragraph}>{topPlayer.name.length > 20 ? topPlayer.name.substring(0, 20) + "..." : topPlayer.name}</Text>
-                    <Text style={GeneralStyles.paragraph}>{topPlayer.assists} assists</Text>
-                    <Text style={GeneralStyles.paragraph}>{assistsPerGame} assists / game</Text>
+                    <Text style={HomeStyles.subTitleGoalAssist}>Assists</Text>
+                    <Image source={{uri: topPlayer.image}} style={HomeStyles.playerImg} />
+                    <Text style={HomeStyles.homeText}>{topPlayer.name.length > 20 ? topPlayer.name.substring(0, 20) + "..." : topPlayer.name}</Text>
+                    <Text style={HomeStyles.homeText}>{topPlayer.assists} assists</Text>
+                    <Text style={HomeStyles.homeText}>{assistsPerGame} assists / game</Text>
                 </View>
             }
         }
@@ -184,20 +191,20 @@ const Home = ({ user }) => {
             totalConceded = totalConceded < 15 ? 15 : totalConceded;
             totalConceded = totalConceded > 85 ? 85 : totalConceded;
             return <View>
-                <Text style={GeneralStyles.paragraph}>Total / average goals</Text>
-                <View>
+                <Text style={HomeStyles.subTitle}>Total / average goals</Text>
+                <View style={HomeStyles.goalsBannerTextTop}>
                     <Text style={GeneralStyles.paragraph}>{averageGoalsScored} goals / game</Text>
                     <Text style={GeneralStyles.paragraph}>{averageGoalsConceded} goals / game</Text>
                 </View>
-                <View>
+                <View style={HomeStyles.goalsBannerWrapper}>
                     <StyledBar isGoalsScored={true} width={totalScored}>
                         <StyledBarScored>
-                            <Text>{goalsScored}</Text>
+                            <Text style={HomeStyles.goalsBannerHomeText}>{goalsScored}</Text>
                         </StyledBarScored>
                     </StyledBar>
                     <StyledBar isGoalsScored={false} width={totalConceded}>
                         <StyledBarConceded>
-                            <Text>{goalsConceded}</Text>
+                            <Text style={HomeStyles.goalsBannerAwayText}>{goalsConceded}</Text>
                         </StyledBarConceded>
                     </StyledBar>
                 </View>
@@ -226,7 +233,7 @@ const Home = ({ user }) => {
             })
 
             return <View >
-                <Text style={GeneralStyles.paragraph}>Last 5 games</Text>
+                <Text style={HomeStyles.subTitle}>Last 5 games</Text>
                 <View>
                     {list.map(item => item)}
                 </View>
@@ -251,8 +258,8 @@ const Home = ({ user }) => {
                     biggestWin.awayGoals = game.goalsConceded;
                 }
             })
-            const bestResult = <Text style={GeneralStyles.paragraph}>Best result: {biggestWin.goals} - {biggestWin.awayGoals}</Text>
-            const cleanSheetsElement = <Text style={GeneralStyles.paragraph}>Cleansheets: {cleanSheets}</Text>
+            const bestResult = <Text style={HomeStyles.homeText}>Best result: {biggestWin.goals} - {biggestWin.awayGoals}</Text>
+            const cleanSheetsElement = <Text style={HomeStyles.homeText}>Cleansheets: {cleanSheets}</Text>
             return <View>
                 {bestResult}
                 {cleanSheetsElement}
