@@ -84,7 +84,7 @@ const Home = ({ user, navigation }) => {
             getData();
         });
 
-        navigation.addListener('beforeRemove', () => { 
+        navigation.addListener('blur', () => { 
             setAllTimeGames([]);
             setAllTimePlayerStats([]);
             setLoading(false);

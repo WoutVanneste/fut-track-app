@@ -34,7 +34,7 @@ const Games = ({ navigation, user }) => {
             getData();
         });
 
-        navigation.addListener('beforeRemove', () => { 
+        navigation.addListener('blur', () => { 
             setAddingGame(false);
             setAllTimeGames([]);
             setAllTimePlayerStats([]);

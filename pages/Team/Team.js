@@ -6,13 +6,16 @@ import GeneralStyles from '../../styles/General';
 import TeamStyles from '../../styles/Team';
 import Accordion from 'react-native-collapsible/Accordion';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
+import AddPlayer from './Add-player';
 
 const Team = ({ user, navigation }) => {
     const [team, setTeam] = useState([]);
     const [subs, setSubs] = useState([]);
     const [showingStats, setShowingStats] = useState(false);
+    const [addingPlayer, setAddingPlayer] = useState(false);
     const [loading, setLoading] = useState(false);
     const [activeSections, setActiveSections] = useState([0]);
+    const [replacingPlayer, setReplacingPlayer] = useState(null);
 
     useEffect(() => {
         const getData = async () => {
@@ -30,14 +33,17 @@ const Team = ({ user, navigation }) => {
 
         navigation.addListener('focus', () => { 
             getData();
+            setActiveSections([0]);
         });
 
-        navigation.addListener('beforeRemove', () => { 
+        navigation.addListener('blur', () => {
             setTeam([]);
             setSubs([]);
             setShowingStats(false);
+            setAddingPlayer(false);
+            setReplacingPlayer(null);
             setLoading(false);
-            setActiveSections([0])
+            setActiveSections([0]);
         });
     }, []);
 
@@ -46,7 +52,8 @@ const Team = ({ user, navigation }) => {
     }
 
     const replacePlayer = player => {
-
+        setReplacingPlayer(player);
+        setAddingPlayer(true);
     }
 
     const sections = [
@@ -172,13 +179,17 @@ const Team = ({ user, navigation }) => {
     };
 
     const renderTeam = () => {
-        return <Accordion
-        sections={sections}
-        activeSections={activeSections}
-        renderHeader={renderHeader}
-        renderContent={renderContent}
-        onChange={(activeSection) => setActiveSections(activeSection)}
-      />
+        if (team.length > 0 && subs.length > 0) {
+            return <Accordion
+                sections={sections}
+                activeSections={activeSections}
+                renderHeader={renderHeader}
+                renderContent={renderContent}
+                onChange={(activeSection) => setActiveSections(activeSection)}
+            />
+        } else {
+            return <Text style={GeneralStyles.paragraph}>You don't have a team yet!</Text>
+        }
     }
 
     // Return statements
@@ -188,8 +199,20 @@ const Team = ({ user, navigation }) => {
 
     return (
         <View style={GeneralStyles.pageContainer}>
+            {/* Render buttons here for both stats and replace with close button */}
+            <View>
+            <Text style={GeneralStyles.pageTitle}>Team</Text>
+            {showingStats || addingPlayer ?
+            <Button title="x" onPress={() => {
+                setShowingStats(false);
+                setAddingPlayer(false);
+            }} />:
+            <Button title="Team stats" onPress={() => setShowingStats(true)} />}
+            </View>
             {showingStats ?
             <TeamStats /> :
+            addingPlayer ? 
+            <AddPlayer player={replacingPlayer} /> :
             renderTeam()}
         </View>
     );
