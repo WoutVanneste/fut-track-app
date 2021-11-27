@@ -284,7 +284,8 @@ const Team = ({ user, navigation }) => {
                 <Button title="Team stats" onPress={() => setShowingStats(true)} />}
             </View>
             {showingStats ?
-            <TeamStats /> :
+            <TeamStats 
+                user={user}/> :
             addingPlayer ? 
             <AddPlayer 
                 user={user}

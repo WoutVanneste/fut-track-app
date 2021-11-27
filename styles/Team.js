@@ -77,6 +77,26 @@ const TeamStyles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+    },
+    playerStatsFlex: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    playerStatsFlexVertical: {
+        display: 'flex',
+        flexDirection: 'column',
+        marginLeft: 15
+    },
+    playerStatsWrapper: {
+        marginBottom: 25,
+        marginLeft: 10
+    },
+    playerStatsContainer: {
+        paddingTop: 25
+    },
+    playerInfoText: {
+        marginTop: 5
     }
 });
 

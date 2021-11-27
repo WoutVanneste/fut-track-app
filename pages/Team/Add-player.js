@@ -26,6 +26,8 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
         // Clear any data when leaving the add page
         return () => {
             setAddingPlayer(false);
+            setPlayerSearch("");
+            setLoading(false);
         };
     }, []);
 
