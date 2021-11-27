@@ -16,7 +16,9 @@ const Team = ({ user, navigation }) => {
     const [loading, setLoading] = useState(false);
     const [activeSections, setActiveSections] = useState([0]);
     const [replacingPlayer, setReplacingPlayer] = useState(null);
-
+    const [reloadFlatlist, setReloadFlatList] = useState(false);
+    const [isNewPlayerSub, setIsNewPlayerSub] = useState(false);
+ 
     useEffect(() => {
         const getData = async () => {
             setLoading(true);
@@ -31,11 +33,11 @@ const Team = ({ user, navigation }) => {
         }
         getData();
 
-        navigation.addListener('focus', () => { 
+        navigation.addListener('focus', () => {
             getData();
             setActiveSections([0]);
         });
-
+        
         navigation.addListener('blur', () => {
             setTeam([]);
             setSubs([]);
@@ -47,8 +49,59 @@ const Team = ({ user, navigation }) => {
         });
     }, []);
 
-    const removeFromTeam = player => {
+    const containsObject = (obj, list) => {
+        let i;
+        for (i = 0; i < list.length; i++) {
+            if (list[i] === obj) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    const removeFromTeam = player => {
+        if (containsObject(player, team)) {
+            let newTeam = team;
+            const index = team.findIndex(teamPlayer => teamPlayer.id === player.id);
+            newTeam.splice(index, 1);
+            setTeam(newTeam);
+            const saveLocalData = async () => {
+                const fullTeam = {
+                    team: newTeam,
+                    subs: subs
+                };
+                try {
+                    const jsonValue = JSON.stringify(fullTeam)
+                    await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
+                } catch (e) {
+                    console.error('Failed to save team', e);
+                }
+            }
+            saveLocalData();
+            setReloadFlatList(!reloadFlatlist);
+            return;
+        }
+        if (containsObject(player, subs)) {
+            let newSubs = subs;
+            const index = subs.findIndex(subsPlayer => subsPlayer.id === player.id);
+            newSubs.splice(index, 1);
+            setSubs(newSubs);
+            const saveLocalData = async () => {
+                const fullTeam = {
+                    team: team,
+                    subs: newSubs
+                };
+                try {
+                    const jsonValue = JSON.stringify(fullTeam)
+                    await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
+                } catch (e) {
+                    console.error('Failed to save team', e);
+                }
+            }
+            saveLocalData();
+            setReloadFlatList(!reloadFlatlist);
+            return;
+        }
     }
 
     const replacePlayer = player => {
@@ -61,6 +114,7 @@ const Team = ({ user, navigation }) => {
             title: 'Team',
             id: 0,
             content: <FlatList
+            extraData={reloadFlatlist}
             contentContainerStyle={TeamStyles.flatList}
             horizontal={false}
             numColumns={2}
@@ -110,6 +164,7 @@ const Team = ({ user, navigation }) => {
             title: 'Subs',
             id: 1,
             content: <FlatList
+            extraData={reloadFlatlist}
             contentContainerStyle={TeamStyles.flatList}
             horizontal={false}
             numColumns={2}
@@ -180,13 +235,32 @@ const Team = ({ user, navigation }) => {
 
     const renderTeam = () => {
         if (team.length > 0 && subs.length > 0) {
-            return <Accordion
-                sections={sections}
-                activeSections={activeSections}
-                renderHeader={renderHeader}
-                renderContent={renderContent}
-                onChange={(activeSection) => setActiveSections(activeSection)}
-            />
+            return (
+                <View>
+                    {team.length < 11 || subs.length < 7 ?
+                    <View>
+                        <Button title="Add player" onPress={() => {
+                            setReplacingPlayer(null);
+                            setAddingPlayer(true);
+                            setIsNewPlayerSub(team.length < 11 ? false : true);
+                        }}/>
+                        <Accordion
+                            sections={sections}
+                            activeSections={activeSections}
+                            renderHeader={renderHeader}
+                            renderContent={renderContent}
+                            onChange={(activeSection) => setActiveSections(activeSection)}
+                        />
+                    </View> : 
+                    <Accordion
+                        sections={sections}
+                        activeSections={activeSections}
+                        renderHeader={renderHeader}
+                        renderContent={renderContent}
+                        onChange={(activeSection) => setActiveSections(activeSection)}
+                    />}
+                </View>
+            )
         } else {
             return <Text style={GeneralStyles.paragraph}>You don't have a team yet!</Text>
         }
@@ -200,19 +274,27 @@ const Team = ({ user, navigation }) => {
     return (
         <View style={GeneralStyles.pageContainer}>
             {/* Render buttons here for both stats and replace with close button */}
-            <View>
-            <Text style={GeneralStyles.pageTitle}>Team</Text>
-            {showingStats || addingPlayer ?
-            <Button title="x" onPress={() => {
-                setShowingStats(false);
-                setAddingPlayer(false);
-            }} />:
-            <Button title="Team stats" onPress={() => setShowingStats(true)} />}
+            <View style={TeamStyles.topContainer}>
+                <Text style={GeneralStyles.pageTitle}>Team</Text>
+                {showingStats || addingPlayer ?
+                <Button title="x" onPress={() => {
+                    setShowingStats(false);
+                    setAddingPlayer(false);
+                }} />:
+                <Button title="Team stats" onPress={() => setShowingStats(true)} />}
             </View>
             {showingStats ?
             <TeamStats /> :
             addingPlayer ? 
-            <AddPlayer player={replacingPlayer} /> :
+            <AddPlayer 
+                user={user}
+                player={replacingPlayer}
+                setAddingPlayer={setAddingPlayer}
+                team={team}
+                subs={subs}
+                setTeam={setTeam}
+                setSubs={setSubs}
+                isNewPlayerSub={isNewPlayerSub} /> :
             renderTeam()}
         </View>
     );

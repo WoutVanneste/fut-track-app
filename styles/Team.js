@@ -3,9 +3,6 @@ import { StyleSheet } from 'react-native';
 const TeamStyles = StyleSheet.create({
     flatList: {
         paddingBottom: 30,
-        // display: 'flex',
-        // flexWrap: 'wrap',
-        // flexDirection: 'column'
     },
     collapseTitle: {
         display: 'flex',
@@ -31,13 +28,10 @@ const TeamStyles = StyleSheet.create({
     rightItem: {
         marginLeft: '5%'
     },
-
-
     playerItem: {
         display: 'flex',
         flexDirection: 'column',
     },
-
     iconWrapper: {
         display: 'flex',
         flexDirection: 'row',
@@ -63,14 +57,27 @@ const TeamStyles = StyleSheet.create({
     iconRefresh: {
         backgroundColor: '#3652E7'
     },
+    iconAdd: {
+        backgroundColor: '#C2F655'
+    },
     playerName: {
         marginLeft: 5,
         color: '#ffffff',
         fontFamily: 'Rationale_400Regular',
         fontSize: 16,
         marginTop: 5
+    },
+    searchPlayerInput: {
+        backgroundColor: '#fff',
+        color: '#242834',
+        marginTop: 15
+    },
+    topContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     }
-
 });
 
 export default TeamStyles
