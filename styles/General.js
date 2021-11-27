@@ -35,6 +35,21 @@ const GeneralStyles = StyleSheet.create({
     resizeMode: 'contain',
     borderRadius: 50,
     overflow: "hidden"
+  },
+  goalKeeperLabel: {
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    padding: 3,
+    backgroundColor: '#C2F655',
+    color: '#242834',
+    borderRadius: 5,
+    overflow: 'hidden',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: 13,
+    lineHeight: 13
   }
 });
 
