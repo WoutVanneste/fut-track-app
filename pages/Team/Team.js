@@ -5,7 +5,7 @@ import TeamStats from './Team-stats';
 import GeneralStyles from '../../styles/General';
 import {team as teamData} from '../../data';
 
-const Team = ({ user }) => {
+const Team = ({ user, navigation }) => {
     const [team, setTeam] = useState([]);
     const [subs, setSubs] = useState([]);
     const [showingStats, setShowingStats] = useState(false);
@@ -29,6 +29,18 @@ const Team = ({ user }) => {
         //     setLoading(false);
         // }
         // getData();
+
+        navigation.addListener('focus', () => { 
+            // getData();
+        });
+
+        navigation.addListener('beforeRemove', () => { 
+            setTeam([]);
+            setSubs([]);
+            setShowingStats(false);
+            setLoading(false);
+        });
+
         setTeam(teamData.team);
         setSubs(teamData.subs);
     }, []);
@@ -46,7 +58,7 @@ const Team = ({ user }) => {
             <View key={index}>
                 {/* Add different styling when gk (label) */}
                 <View>
-                    <Image source={{ uri: teamPlayer.item.image }} style={{width: 100, height: 100, resizeMode: 'contain'}} />
+                    <Image source={{ uri: teamPlayer.item.image }} style={GeneralStyles.playerImg} />
                 </View>
                 <View>
                     <Text>{teamPlayer.item.name.length > 20 ? teamPlayer.item.name.substring(0, 20) + "..." : teamPlayer.item.name}</Text>

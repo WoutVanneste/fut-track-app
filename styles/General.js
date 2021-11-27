@@ -28,6 +28,13 @@ const GeneralStyles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row'
+  },
+  playerImg: {
+    width: 60,
+    height: 60,
+    resizeMode: 'contain',
+    borderRadius: 50,
+    overflow: "hidden"
   }
 });
 

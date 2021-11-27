@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Button, Text } from 'react-native';
+import { View, Button, Text, Alert } from 'react-native';
 import GeneralStyles from '../../styles/General';
 
 const Settings = ({ user }) => {
     const [isDeleting, setIsDeleting] = useState(false);
-    const removeData = async () => {
-        setIsDeleting(true);
+
+    const removeAllData = async () => {
         try {
             const dataKeys = [
                 `user-${user.uid}-all-time-games`,
@@ -20,6 +20,22 @@ const Settings = ({ user }) => {
         } catch (e) {
             console.error('Removing club data failed', e);
         }
+    }
+
+    const removeData = () => {
+        setIsDeleting(true);
+        Alert.alert(
+            'You are about to delete all local data',
+            'Are you sure you want to clear your local club data?',
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => { return },
+                    style: "cancel"
+                  },
+                  { text: "Delete", onPress: () => removeAllData() }
+            ]
+        )
         setIsDeleting(false);
     }
 
