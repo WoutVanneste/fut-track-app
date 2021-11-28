@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import {
   getAuth,
   onAuthStateChanged,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import Constants from 'expo-constants';
@@ -49,7 +50,7 @@ const App = () => {
 
   if (!authenticated) {
     return (
-      <Login loginUser={signInWithEmailAndPassword} auth={auth}/>
+      <Login loginUser={signInWithEmailAndPassword} registerUser={createUserWithEmailAndPassword} auth={auth}/>
     );
   };
 

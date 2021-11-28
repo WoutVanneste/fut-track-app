@@ -73,44 +73,42 @@ const Team = ({ user, navigation }) => {
             numColumns={2}
             data={team}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({item, index}) => {
-                return (
-                    <View style={[TeamStyles.listItem, index%2===0 ? undefined : TeamStyles.rightItem]} key={index}>
-                        {item.isGoalKeeper ?
-                        <View style={TeamStyles.playerItem}>
-                            <View style={TeamStyles.playerInfo}>
-                                <View>
-                                    <Image source={{ uri: item.image }} style={GeneralStyles.playerImg} />
-                                    <Text style={GeneralStyles.goalKeeperLabel}>GK</Text>
-                                </View>
-                                <View>
-                                    <TouchableOpacity style={TeamStyles.iconWrapper}>
-                                        {/* <SimpleLineIcon onPress={() => removeFromTeam(item)} style={[TeamStyles.icon, TeamStyles.iconTrash]} name="trash" color="#fff"/> */}
-                                        <SimpleLineIcon onPress={() => replacePlayer(item)} style={[TeamStyles.icon, TeamStyles.iconRefresh]} name="refresh" color="#fff"/>
-                                    </TouchableOpacity>
-                                </View>
+            renderItem={({item, index}) => (
+                <View style={[TeamStyles.listItem, index%2===0 ? undefined : TeamStyles.rightItem]} key={index}>
+                    {item.isGoalKeeper ?
+                    <View style={TeamStyles.playerItem}>
+                        <View style={TeamStyles.playerInfo}>
+                            <View>
+                                <Image source={{ uri: item.image }} style={GeneralStyles.playerImg} />
+                                <Text style={GeneralStyles.goalKeeperLabel}>GK</Text>
                             </View>
-                            <Text style={TeamStyles.playerName}>{item.name.length > 20 ? item.name.substring(0, 20) + "..." : item.name}</Text>
+                            <View>
+                                <TouchableOpacity style={TeamStyles.iconWrapper}>
+                                    {/* <SimpleLineIcon onPress={() => removeFromTeam(item)} style={[TeamStyles.icon, TeamStyles.iconTrash]} name="trash" color="#fff"/> */}
+                                    <SimpleLineIcon onPress={() => replacePlayer(item)} style={[TeamStyles.icon, TeamStyles.iconRefresh]} name="refresh" color="#fff"/>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                        : 
-                        <View style={TeamStyles.playerItem}>
-                            <View style={TeamStyles.playerInfo}>
-                                <View>
-                                    <Image source={{ uri: item.image }} style={GeneralStyles.playerImg} />
-                                </View>
-                                <View>
-                                    <TouchableOpacity style={TeamStyles.iconWrapper}>
-                                        {/* <SimpleLineIcon onPress={() => removeFromTeam(item)} style={[TeamStyles.icon, TeamStyles.iconTrash]} name="trash" color="#fff"/> */}
-                                        <SimpleLineIcon onPress={() => replacePlayer(item)} style={[TeamStyles.icon, TeamStyles.iconRefresh]} name="refresh" color="#fff"/>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                            <Text style={TeamStyles.playerName}>{item.name.length > 20 ? item.name.substring(0, 20) + "..." : item.name}</Text>
-                        </View>}
-                       
+                        <Text style={TeamStyles.playerName}>{item.name.length > 20 ? item.name.substring(0, 20) + "..." : item.name}</Text>
                     </View>
-                )}
-            }
+                    : 
+                    <View style={TeamStyles.playerItem}>
+                        <View style={TeamStyles.playerInfo}>
+                            <View>
+                                <Image source={{ uri: item.image }} style={GeneralStyles.playerImg} />
+                            </View>
+                            <View>
+                                <TouchableOpacity style={TeamStyles.iconWrapper}>
+                                    {/* <SimpleLineIcon onPress={() => removeFromTeam(item)} style={[TeamStyles.icon, TeamStyles.iconTrash]} name="trash" color="#fff"/> */}
+                                    <SimpleLineIcon onPress={() => replacePlayer(item)} style={[TeamStyles.icon, TeamStyles.iconRefresh]} name="refresh" color="#fff"/>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        <Text style={TeamStyles.playerName}>{item.name.length > 20 ? item.name.substring(0, 20) + "..." : item.name}</Text>
+                    </View>}
+                   
+                </View>
+            )}
             />
         },
         {

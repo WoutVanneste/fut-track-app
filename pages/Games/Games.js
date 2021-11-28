@@ -59,17 +59,15 @@ const Games = ({ navigation, user }) => {
             return <FlatList
                 data={sortedGames}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({item, index}) => {
-                    return (
-                        <View key={index} style={GameStyles.gameWrapper}>
-                            {renderGameIcon(item.result)}
-                            <View>
-                                <Text style={GeneralStyles.paragraph}>{item.goalsScored} - {item.goalsConceded}</Text>
-                                <Text style={GeneralStyles.paragraph}>Date: {new Date(item.dateTime).toLocaleString().toString()}</Text>
-                            </View>
+                renderItem={({item, index}) => (
+                    <View key={index} style={GameStyles.gameWrapper}>
+                        {renderGameIcon(item.result)}
+                        <View>
+                            <Text style={GeneralStyles.paragraph}>{item.goalsScored} - {item.goalsConceded}</Text>
+                            <Text style={GeneralStyles.paragraph}>Date: {new Date(item.dateTime).toLocaleString().toString()}</Text>
                         </View>
-                    )
-                }} />
+                    </View>
+                )} />
         } else {
             return <Text style={GeneralStyles.paragraph}>No games played so far.</Text>;
         }

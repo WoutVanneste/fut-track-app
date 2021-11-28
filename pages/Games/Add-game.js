@@ -374,38 +374,35 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
         data={fullTeam}
         contentContainerStyle={{paddingBottom: 125}}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => {
-            console.log('item.goals', item.goals);
-            return (
-                <View style={[GameStyles.playerFlexbox, GameStyles.parentPlayerFlexbox]} key={index}>
-                    <View style={GameStyles.playerFlexbox}>
-                        {!item.isStarting ?
-                         <TouchableOpacity onPress={() => setPlayerActive(item)}>
-                            <Image source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />
-                        </TouchableOpacity>:
-                        <Image source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />}
-                        <Text style={GeneralStyles.paragraph}>{item.name.length > 14 ? item.name.substring(0, 14) + "..." : item.name}</Text>
-                    </View>
-                    <View style={GameStyles.playerFlexbox}>
-                        {item.goals > 0 || item.assists > 0 ? <TouchableOpacity onPress={() => clearGoalsAssists(item)}><Text style={[GeneralStyles.smallButton, GeneralStyles.redButton]}>x</Text></TouchableOpacity> : null}
-                        <TouchableOpacity style={GeneralStyles.leftMargin} onPress={() => addTeamGoal(item)}>
-                            <Text style={[GeneralStyles.smallButton, GeneralStyles.blueButton]}>{item.goals > 0 ? item.goals.toString() : "G"}</Text>
-                            {/* add text with + or - because after element not possible */}
-                        </TouchableOpacity>
-                        <TouchableOpacity style={GeneralStyles.leftMargin} onPress={() => addTeamAssist(item)}>
-                            <Text style={[GeneralStyles.smallButton, GeneralStyles.blueButton]}>{item.assists > 0 ? item.assists.toString() : "A"}</Text>
-                            {/* add text with + or - because after element not possible */}
-                        </TouchableOpacity>
-                        {item.id === motm ? 
-                        // Add same styling to view as for the button but with active color
-                        <ImageBackground style={GameStyles.motmButton} resizeMode="contain" source={require('../../assets/images/motm-gold.png')}></ImageBackground> :
-                        <TouchableOpacity onPress={() => makePlayerMotm(item)} title="MOTM">
-                            <ImageBackground style={GameStyles.motmButton} resizeMode="contain" source={require('../../assets/images/motm.png')}></ImageBackground>
-                        </TouchableOpacity>}
-                    </View>
+        renderItem={({item, index}) => (
+            <View style={[GameStyles.playerFlexbox, GameStyles.parentPlayerFlexbox]} key={index}>
+                <View style={GameStyles.playerFlexbox}>
+                    {!item.isStarting ?
+                     <TouchableOpacity onPress={() => setPlayerActive(item)}>
+                        <Image source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />
+                    </TouchableOpacity>:
+                    <Image source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />}
+                    <Text style={GeneralStyles.paragraph}>{item.name.length > 14 ? item.name.substring(0, 14) + "..." : item.name}</Text>
                 </View>
-            )
-        }}
+                <View style={GameStyles.playerFlexbox}>
+                    {item.goals > 0 || item.assists > 0 ? <TouchableOpacity onPress={() => clearGoalsAssists(item)}><Text style={[GeneralStyles.smallButton, GeneralStyles.redButton]}>x</Text></TouchableOpacity> : null}
+                    <TouchableOpacity style={GeneralStyles.leftMargin} onPress={() => addTeamGoal(item)}>
+                        <Text style={[GeneralStyles.smallButton, GeneralStyles.blueButton]}>{item.goals > 0 ? item.goals.toString() : "G"}</Text>
+                        {/* add text with + or - because after element not possible */}
+                    </TouchableOpacity>
+                    <TouchableOpacity style={GeneralStyles.leftMargin} onPress={() => addTeamAssist(item)}>
+                        <Text style={[GeneralStyles.smallButton, GeneralStyles.blueButton]}>{item.assists > 0 ? item.assists.toString() : "A"}</Text>
+                        {/* add text with + or - because after element not possible */}
+                    </TouchableOpacity>
+                    {item.id === motm ? 
+                    // Add same styling to view as for the button but with active color
+                    <ImageBackground style={GameStyles.motmButton} resizeMode="contain" source={require('../../assets/images/motm-gold.png')}></ImageBackground> :
+                    <TouchableOpacity onPress={() => makePlayerMotm(item)} title="MOTM">
+                        <ImageBackground style={GameStyles.motmButton} resizeMode="contain" source={require('../../assets/images/motm.png')}></ImageBackground>
+                    </TouchableOpacity>}
+                </View>
+            </View>
+        )}
         />;
     }
 
