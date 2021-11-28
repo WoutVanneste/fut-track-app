@@ -160,7 +160,7 @@ const Team = ({ user, navigation }) => {
     ]
 
     const renderContent = (section) => {
-        return <SafeAreaView style={TeamStyles.container}>
+        return <SafeAreaView>
             {section.content}
         </SafeAreaView> ;
     };

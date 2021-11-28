@@ -20,7 +20,7 @@ const GameStyles = StyleSheet.create({
     },
     parentPlayerFlexbox: {
         justifyContent: 'space-between',
-        marginBottom: 10
+        position: 'relative'
     },
     scoreLineWrapper: {
         display: "flex",
@@ -52,7 +52,8 @@ const GameStyles = StyleSheet.create({
         borderWidth: 1.5,
         borderRadius: 50,
         overflow: 'hidden',
-        marginRight: 7.5
+        marginRight: 7.5,
+        position: 'relative'
     },
     motmActive: {
         borderColor: '#FFA000',
@@ -75,6 +76,15 @@ const GameStyles = StyleSheet.create({
         textAlign: 'center',
         marginLeft: 5,
         marginRight: 5
+    },
+    notActiveSub: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        top: 0,
+        left: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.25)',
+        flex: 1,
     }
 });
 

@@ -80,7 +80,7 @@ const Games = ({ navigation, user }) => {
 
     return (
         <View style={GeneralStyles.pageContainer}>
-            <View style={GeneralStyles.topContainer}>
+            <View style={GeneralStyles.topContainerSmall}>
                 <Text style={GeneralStyles.pageTitle}>Games</Text>
                 {addingGame ?
                 <TouchableOpacity onPress={() => setAddingGame(false)}><Text style={[GeneralStyles.button, GeneralStyles.redButton]}>x</Text></TouchableOpacity>:

@@ -3,6 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, Button, Image, TouchableOpacity, FlatList, SafeAreaView, Alert, Touchable, ImageBackground } from 'react-native';
 import GeneralStyles from '../../styles/General';
 import GameStyles from '../../styles/Games';
+import TeamStyles from '../../styles/Team';
+import Accordion from 'react-native-collapsible/Accordion';
+import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 
 const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
     const [team, setTeam] = useState([]);
@@ -15,6 +18,7 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
     const [totalGoals, setTotalGoals] = useState(0);
     const [totalAssists, setTotalAssists] = useState(0);
     const [totalActiveSubs, setTotalActiveSubs] = useState(0);
+    const [activeSections, setActiveSections] = useState([0]);
 
     useEffect(() => {
         const getData = async () => {
@@ -246,15 +250,17 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
             const newSubs = [...subs];
             const index = newSubs.findIndex((teamPlayer) => teamPlayer.id === player.id);
             if (totalActiveSubs < 3) {
-                newSubs[index].active = true;
+                newSubs[index].isActive = true;
                 if (newSubs[index].goals) {
                     newSubs[index].goals += 1;
                 } else {
                     newSubs[index].goals = 1;
                 }
+                const newTotalGoals = totalGoals + 1;
+                setTotalGoals(newTotalGoals);
                 setTotalActiveSubs(totalActiveSubs + 1);
                 setSubs(newSubs);
-            } else if (newSubs[index].active) {
+            } else if (newSubs[index].isActive) {
                 if (newSubs[index].goals) {
                     newSubs[index].goals += 1;
                 } else {
@@ -283,7 +289,7 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
             const newSubs = [...subs];
             const index = newSubs.findIndex((teamPlayer) => teamPlayer.id === player.id);
             if (totalActiveSubs < 3) {
-                newSubs[index].active = true;
+                newSubs[index].isActive = true;
                 setTotalActiveSubs(totalActiveSubs + 1);
                 if (newSubs[index].assists) {
                     newSubs[index].assists += 1;
@@ -293,7 +299,7 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
                 const newTotalAssists = totalAssists + 1;
                 setTotalAssists(newTotalAssists);
                 setSubs(newSubs);
-            } else if (newSubs[index].active) {
+            } else if (newSubs[index].isActive) {
                 if (newSubs[index].assists) {
                     newSubs[index].assists += 1;
                 } else {
@@ -309,14 +315,14 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
     const setPlayerActive = player => {
         const newSubs = [...subs];
         const index = newSubs.findIndex((teamPlayer) => teamPlayer.id === player.id);
-        const newActiveState = !newSubs[index].active;
+        const newActiveState = !newSubs[index].isActive;
         if (newActiveState) {
             if (totalActiveSubs < 3) {
-                newSubs[index].active = true;
+                newSubs[index].isActive = true;
                 setTotalActiveSubs(totalActiveSubs + 1);
             }
         } else {
-            newSubs[index].active = false;
+            newSubs[index].isActive = false;
             setTotalActiveSubs(totalActiveSubs - 1);
         }
         setSubs(newSubs);
@@ -343,7 +349,7 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
             newSubs[index].assists = 0;
             newSubs[index].goals = 0;
             if (motm !== player.id) {
-                newSubs[index].active = false;
+                newSubs[index].isActive = false;
                 setTotalActiveSubs(totalActiveSubs - 1);
             }
             setSubs(newSubs);
@@ -357,57 +363,123 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
             const newSubs = [...subs];
             const index = newSubs.findIndex((teamPlayer) => teamPlayer.id === player.id);
             if (totalActiveSubs < 3) {
-                newSubs[index].active = true;
+                newSubs[index].isActive = true;
                 setTotalActiveSubs(totalActiveSubs + 1);
                 setMotm(player.id);
                 setSubs(newSubs);
-            } else if (newSubs[index].active){
+            } else if (newSubs[index].isActive){
                 setMotm(player.id);
             }
         }
     }
 
+    const sections = [
+        {
+            title: 'Team',
+            id: 0,
+            content: <FlatList 
+            data={team}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item, index}) => (
+                <View style={[GameStyles.playerFlexbox, GameStyles.parentPlayerFlexbox]} key={index}>
+                    <View style={GameStyles.playerFlexbox}>
+                        {!item.isStarting ?
+                         <TouchableOpacity style={item.id === motm ? [GameStyles.motmWrapper, GameStyles.motmActive] : [GameStyles.motmWrapper, GameStyles.motmNotActive]} onPress={() => setPlayerActive(item)}>
+                            <Image source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />
+                        </TouchableOpacity>:
+                        <View style={item.id === motm ? [GameStyles.motmWrapper, GameStyles.motmActive] : [GameStyles.motmWrapper, GameStyles.motmNotActive]}>
+                            <Image source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />
+                        </View>}
+                        <Text style={GeneralStyles.paragraph}>{item.name.length > 14 ? item.name.substring(0, 14) + "..." : item.name}</Text>
+                    </View>
+                    <View style={GameStyles.playerFlexbox}>
+                        {item.goals > 0 || item.assists > 0 ? <TouchableOpacity onPress={() => clearGoalsAssists(item)}><Text style={[GeneralStyles.smallButton, GeneralStyles.redButton]}>x</Text></TouchableOpacity> : null}
+                        <TouchableOpacity style={[GeneralStyles.leftMargin, GameStyles.addTextWrapper]} onPress={() => addTeamGoal(item)}>
+                            <Text style={[GeneralStyles.smallButton, GeneralStyles.blueButton]}>{item.goals > 0 ? item.goals.toString() : "G"}</Text>
+                            <Text style={GameStyles.addText}>+</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[GeneralStyles.leftMargin, GameStyles.addTextWrapper]} onPress={() => addTeamAssist(item)}>
+                            <Text style={[GeneralStyles.smallButton, GeneralStyles.blueButton]}>{item.assists > 0 ? item.assists.toString() : "A"}</Text>
+                            <Text style={GameStyles.addText}>+</Text>
+                        </TouchableOpacity>
+                        {item.id === motm ? 
+                        <TouchableOpacity onPress={() => setMotm(0)}>
+                            <ImageBackground style={GameStyles.motmButton} resizeMode="contain" source={require('../../assets/images/motm-gold.png')}></ImageBackground>
+                        </TouchableOpacity> :
+                        <TouchableOpacity onPress={() => makePlayerMotm(item)} title="MOTM">
+                            <ImageBackground style={GameStyles.motmButton} resizeMode="contain" source={require('../../assets/images/motm.png')}></ImageBackground>
+                        </TouchableOpacity>}
+                    </View>
+                </View>)}
+            />
+        },
+        {
+            title: 'Subs',
+            id: 1,
+            content: <FlatList 
+            data={subs}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item, index}) => (
+                <View style={[GameStyles.playerFlexbox, GameStyles.parentPlayerFlexbox]} key={index}>
+                    <View style={GameStyles.playerFlexbox}>
+                        {!item.isStarting ?
+                            <TouchableOpacity style={item.id === motm ? [GameStyles.motmWrapper, GameStyles.motmActive] : [GameStyles.motmWrapper, GameStyles.motmNotActive]} onPress={() => setPlayerActive(item)}>
+                            <ImageBackground source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />
+                            {!item.isActive && <View style={GameStyles.notActiveSub} />}
+                        </TouchableOpacity>:
+                        <View style={item.id === motm ? [GameStyles.motmWrapper, GameStyles.motmActive] : [GameStyles.motmWrapper, GameStyles.motmNotActive]}>
+                            <ImageBackground source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />
+                            {!item.isActive && <View style={GameStyles.notActiveSub} />}
+                        </View>}
+                        <Text style={GeneralStyles.paragraph}>{item.name.length > 14 ? item.name.substring(0, 14) + "..." : item.name}</Text>
+                    </View>
+                    <View style={GameStyles.playerFlexbox}>
+                        {item.goals > 0 || item.assists > 0 ? <TouchableOpacity onPress={() => clearGoalsAssists(item)}><Text style={[GeneralStyles.smallButton, GeneralStyles.redButton]}>x</Text></TouchableOpacity> : null}
+                        <TouchableOpacity style={[GeneralStyles.leftMargin, GameStyles.addTextWrapper]} onPress={() => addTeamGoal(item)}>
+                            <Text style={[GeneralStyles.smallButton, GeneralStyles.blueButton]}>{item.goals > 0 ? item.goals.toString() : "G"}</Text>
+                            <Text style={GameStyles.addText}>+</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[GeneralStyles.leftMargin, GameStyles.addTextWrapper]} onPress={() => addTeamAssist(item)}>
+                            <Text style={[GeneralStyles.smallButton, GeneralStyles.blueButton]}>{item.assists > 0 ? item.assists.toString() : "A"}</Text>
+                            <Text style={GameStyles.addText}>+</Text>
+                        </TouchableOpacity>
+                        {item.id === motm ? 
+                        <TouchableOpacity onPress={() => setMotm(0)}>
+                            <ImageBackground style={GameStyles.motmButton} resizeMode="contain" source={require('../../assets/images/motm-gold.png')}></ImageBackground>
+                        </TouchableOpacity> :
+                        <TouchableOpacity onPress={() => makePlayerMotm(item)} title="MOTM">
+                            <ImageBackground style={GameStyles.motmButton} resizeMode="contain" source={require('../../assets/images/motm.png')}></ImageBackground>
+                        </TouchableOpacity>}
+                    </View>
+                </View>)}
+            />
+        }
+    ];
+
     // Render methods
-    const renderTeam = () => {
-        let fullTeam = team.concat(subs);
-        return <FlatList 
-        data={fullTeam}
-        contentContainerStyle={{paddingBottom: 125}}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => (
-            <View style={[GameStyles.playerFlexbox, GameStyles.parentPlayerFlexbox]} key={index}>
-                <View style={GameStyles.playerFlexbox}>
-                    {!item.isStarting ?
-                     <TouchableOpacity style={item.id === motm ? [GameStyles.motmWrapper, GameStyles.motmActive] : [GameStyles.motmWrapper, GameStyles.motmNotActive]} onPress={() => setPlayerActive(item)}>
-                        <Image source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />
-                    </TouchableOpacity>:
-                    <View style={item.id === motm ? [GameStyles.motmWrapper, GameStyles.motmActive] : [GameStyles.motmWrapper, GameStyles.motmNotActive]}>
-                        <Image source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />
-                    </View>}
-                    <Text style={GeneralStyles.paragraph}>{item.name.length > 14 ? item.name.substring(0, 14) + "..." : item.name}</Text>
-                </View>
-                <View style={GameStyles.playerFlexbox}>
-                    {item.goals > 0 || item.assists > 0 ? <TouchableOpacity onPress={() => clearGoalsAssists(item)}><Text style={[GeneralStyles.smallButton, GeneralStyles.redButton]}>x</Text></TouchableOpacity> : null}
-                    <TouchableOpacity style={[GeneralStyles.leftMargin, GameStyles.addTextWrapper]} onPress={() => addTeamGoal(item)}>
-                        <Text style={[GeneralStyles.smallButton, GeneralStyles.blueButton]}>{item.goals > 0 ? item.goals.toString() : "G"}</Text>
-                        <Text style={GameStyles.addText}>+</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[GeneralStyles.leftMargin, GameStyles.addTextWrapper]} onPress={() => addTeamAssist(item)}>
-                        <Text style={[GeneralStyles.smallButton, GeneralStyles.blueButton]}>{item.assists > 0 ? item.assists.toString() : "A"}</Text>
-                        <Text style={GameStyles.addText}>+</Text>
-                    </TouchableOpacity>
-                    {item.id === motm ? 
-                    <TouchableOpacity onPress={() => setMotm(0)}>
-                        <ImageBackground style={GameStyles.motmButton} resizeMode="contain" source={require('../../assets/images/motm-gold.png')}></ImageBackground>
-                    </TouchableOpacity> :
-                    <TouchableOpacity onPress={() => makePlayerMotm(item)} title="MOTM">
-                        <ImageBackground style={GameStyles.motmButton} resizeMode="contain" source={require('../../assets/images/motm.png')}></ImageBackground>
-                    </TouchableOpacity>}
-                </View>
+    const renderContent = (section) => {
+        return <SafeAreaView>
+            {section.content}
+        </SafeAreaView> ;
+    };
+
+    const renderHeader = (section) => {
+        if (activeSections.length > 0 && section.id === activeSections[0]) {
+        return (
+            <View style={TeamStyles.collapseTitle}>
+                <SimpleLineIcon style={{fontSize: 18, marginRight: 15, marginLeft: 5}} name="arrow-up-circle" color="#fff"/>
+                <Text style={GeneralStyles.paragraph}>{section.title}</Text>
             </View>
-        )}
-        />;
-    }
+            );
+        } else {
+            return (
+            <View style={TeamStyles.collapseTitle}>
+                <SimpleLineIcon style={{fontSize: 18, marginRight: 15, marginLeft: 5}} name="arrow-down-circle" color="#fff"/>
+                <Text style={GeneralStyles.paragraph}>{section.title}</Text>
+            </View>
+            );
+        }
+    };
 
     // Return statements
     if (loading) {
@@ -415,35 +487,36 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
     }
 
     if (team.length > 0 && subs.length > 0 && initialTeam.length > 0 && initialSubs.length > 0){
-        return <SafeAreaView>
-            <View>
-            <View>
-                <View style={[GameStyles.scoreLineWrapper, GameStyles.parentScoreLineWrapper]}>
-                    <View style={GameStyles.scoreLineWrapper}>
-                        <Text style={GeneralStyles.paragraph}>Scoreline:</Text>
-                        <Text style={GameStyles.scoreLineText}>{totalGoals}</Text>
-                        <Text style={GeneralStyles.paragraph}>-</Text> 
-                        <Text style={GameStyles.scoreLineText} onPress={() => {
-                            const newAwayGoals = awayGoals + 1;
+        return <View>
+            <View style={[GameStyles.scoreLineWrapper, GameStyles.parentScoreLineWrapper]}>
+                <View style={GameStyles.scoreLineWrapper}>
+                    <Text style={GeneralStyles.paragraph}>Scoreline:</Text>
+                    <Text style={GameStyles.scoreLineText}>{totalGoals}</Text>
+                    <Text style={GeneralStyles.paragraph}>-</Text> 
+                    <Text style={GameStyles.scoreLineText} onPress={() => {
+                        const newAwayGoals = awayGoals + 1;
+                        setAwayGoals(newAwayGoals);
+                    }}>{awayGoals}</Text>
+                    {awayGoals > 0 && 
+                    <TouchableOpacity onPress={() => {
+                            const newAwayGoals = awayGoals - 1;
                             setAwayGoals(newAwayGoals);
-                        }}>{awayGoals}</Text>
-                        {awayGoals > 0 && 
-                        <TouchableOpacity onPress={() => {
-                                const newAwayGoals = awayGoals - 1;
-                                setAwayGoals(newAwayGoals);
-                            }}>
-                            <Text style={[GeneralStyles.smallButton, GeneralStyles.redButton]}>-</Text>
-                        </TouchableOpacity>}
-                    </View>
-                    <TouchableOpacity onPress={submitGame}>
-                        <Text style={[GeneralStyles.button, GeneralStyles.greenButton]}>Save game</Text>
-                    </TouchableOpacity>
+                        }}>
+                        <Text style={[GeneralStyles.smallButton, GeneralStyles.redButton]}>-</Text>
+                    </TouchableOpacity>}
                 </View>
+                <TouchableOpacity onPress={submitGame}>
+                    <Text style={[GeneralStyles.button, GeneralStyles.greenButton]}>Save game</Text>
+                </TouchableOpacity>
             </View>
-            <Text style={GeneralStyles.paragraph}>Team</Text>
-        </View>
-        {renderTeam()}
-        </SafeAreaView>;
+            <Accordion
+                sections={sections}
+                activeSections={activeSections}
+                renderHeader={renderHeader}
+                renderContent={renderContent}
+                onChange={(activeSection) => setActiveSections(activeSection)}
+            />
+        </View>;
     } else {
         return <Text style={GeneralStyles.paragraph}>You don't have any players in your team yet. Create your team and add your first game.</Text>;
     }

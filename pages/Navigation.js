@@ -22,7 +22,7 @@ const Navigation = ({ user }) => {
               position: 'absolute',
               elevation: 0,
               backgroundColor: '#3652E7',
-              height: 60,
+              height: 50,
               borderWidth: 0,
               borderTopWidth: 0
             },

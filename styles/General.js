@@ -29,6 +29,13 @@ const GeneralStyles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row'
   },
+  topContainerSmall: {
+    marginBottom: 15,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row'
+  },
   playerImg: {
     width: 60,
     height: 60,
