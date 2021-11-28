@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Text, Button, FlatList, SafeAreaView, ImageBackground } from 'react-native';
+import { View, Text, Button, FlatList, SafeAreaView, ImageBackground, TouchableOpacity } from 'react-native';
 import AddGame from './Add-game';
 import GeneralStyles from '../../styles/General';
 import GameStyles from '../../styles/Games';
@@ -85,8 +85,8 @@ const Games = ({ navigation, user }) => {
             <View style={GeneralStyles.topContainer}>
                 <Text style={GeneralStyles.pageTitle}>Games</Text>
                 {addingGame ?
-                <Button onPress={() => setAddingGame(false)} title="x"/>: 
-                <Button onPress={() => setAddingGame(true)} title="Add game"/>}
+                <TouchableOpacity onPress={() => setAddingGame(false)}><Text style={[GeneralStyles.button, GeneralStyles.redButton]}>x</Text></TouchableOpacity>:
+                <TouchableOpacity onPress={() => setAddingGame(true)}><Text style={[GeneralStyles.button, GeneralStyles.greenButton]}>Add game</Text></TouchableOpacity>}
             </View>
             {addingGame ? 
             <AddGame

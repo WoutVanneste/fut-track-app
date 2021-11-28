@@ -70,7 +70,8 @@ const TeamStyles = StyleSheet.create({
     searchPlayerInput: {
         backgroundColor: '#fff',
         color: '#242834',
-        marginTop: 15
+        marginTop: 10,
+        marginBottom: 20
     },
     topContainer: {
         display: 'flex',
@@ -97,6 +98,9 @@ const TeamStyles = StyleSheet.create({
     },
     playerInfoText: {
         marginTop: 5
+    },
+    searchWrapper: {
+        marginTop: 25
     }
 });
 

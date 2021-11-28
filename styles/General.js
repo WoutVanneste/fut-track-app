@@ -36,6 +36,13 @@ const GeneralStyles = StyleSheet.create({
     borderRadius: 50,
     overflow: "hidden"
   },
+  smallPlayerImg: {
+    width: 50,
+    height: 50,
+    resizeMode: 'contain',
+    borderRadius: 50,
+    overflow: "hidden"
+  },
   goalKeeperLabel: {
     position: 'absolute',
     left: 0,
@@ -50,6 +57,39 @@ const GeneralStyles = StyleSheet.create({
     alignItems: 'center',
     fontSize: 13,
     lineHeight: 13
+  },
+  button: {
+    borderRadius: 7.5,
+    overflow: 'hidden',
+    paddingLeft: 12.5,
+    paddingRight: 12.5,
+    paddingTop: 7.5,
+    paddingBottom: 7.5,
+    fontSize: 14
+  },
+  smallButton: {
+      borderRadius: 7.5,
+      overflow: 'hidden',
+      paddingLeft: 10,
+      paddingRight: 10,
+      paddingTop: 7.5,
+      paddingBottom: 7.5,
+      fontSize: 14
+  },
+  greenButton: {
+    color: '#242834',
+    backgroundColor: '#C2F655',
+  },
+  redButton: {
+    color: '#ffffff',
+    backgroundColor: '#8B0617'
+  },
+  blueButton: {
+    color: '#ffffff',
+    backgroundColor: '#3652E7'
+  },
+  leftMargin: {
+    marginLeft: 12.5
   }
 });
 

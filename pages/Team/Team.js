@@ -16,7 +16,6 @@ const Team = ({ user, navigation }) => {
     const [loading, setLoading] = useState(false);
     const [activeSections, setActiveSections] = useState([0]);
     const [replacingPlayer, setReplacingPlayer] = useState(null);
-    const [reloadFlatlist, setReloadFlatList] = useState(false);
     const [isNewPlayerSub, setIsNewPlayerSub] = useState(false);
  
     useEffect(() => {
@@ -59,51 +58,6 @@ const Team = ({ user, navigation }) => {
         return false;
     }
 
-    const removeFromTeam = player => {
-        if (containsObject(player, team)) {
-            let newTeam = team;
-            const index = team.findIndex(teamPlayer => teamPlayer.id === player.id);
-            newTeam.splice(index, 1);
-            setTeam(newTeam);
-            const saveLocalData = async () => {
-                const fullTeam = {
-                    team: newTeam,
-                    subs: subs
-                };
-                try {
-                    const jsonValue = JSON.stringify(fullTeam)
-                    await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
-                } catch (e) {
-                    console.error('Failed to save team', e);
-                }
-            }
-            saveLocalData();
-            setReloadFlatList(!reloadFlatlist);
-            return;
-        }
-        if (containsObject(player, subs)) {
-            let newSubs = subs;
-            const index = subs.findIndex(subsPlayer => subsPlayer.id === player.id);
-            newSubs.splice(index, 1);
-            setSubs(newSubs);
-            const saveLocalData = async () => {
-                const fullTeam = {
-                    team: team,
-                    subs: newSubs
-                };
-                try {
-                    const jsonValue = JSON.stringify(fullTeam)
-                    await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
-                } catch (e) {
-                    console.error('Failed to save team', e);
-                }
-            }
-            saveLocalData();
-            setReloadFlatList(!reloadFlatlist);
-            return;
-        }
-    }
-
     const replacePlayer = player => {
         setReplacingPlayer(player);
         setAddingPlayer(true);
@@ -114,7 +68,6 @@ const Team = ({ user, navigation }) => {
             title: 'Team',
             id: 0,
             content: <FlatList
-            extraData={reloadFlatlist}
             contentContainerStyle={TeamStyles.flatList}
             horizontal={false}
             numColumns={2}
@@ -132,7 +85,7 @@ const Team = ({ user, navigation }) => {
                                 </View>
                                 <View>
                                     <TouchableOpacity style={TeamStyles.iconWrapper}>
-                                        <SimpleLineIcon onPress={() => removeFromTeam(item)} style={[TeamStyles.icon, TeamStyles.iconTrash]} name="trash" color="#fff"/>
+                                        {/* <SimpleLineIcon onPress={() => removeFromTeam(item)} style={[TeamStyles.icon, TeamStyles.iconTrash]} name="trash" color="#fff"/> */}
                                         <SimpleLineIcon onPress={() => replacePlayer(item)} style={[TeamStyles.icon, TeamStyles.iconRefresh]} name="refresh" color="#fff"/>
                                     </TouchableOpacity>
                                 </View>
@@ -147,7 +100,7 @@ const Team = ({ user, navigation }) => {
                                 </View>
                                 <View>
                                     <TouchableOpacity style={TeamStyles.iconWrapper}>
-                                        <SimpleLineIcon onPress={() => removeFromTeam(item)} style={[TeamStyles.icon, TeamStyles.iconTrash]} name="trash" color="#fff"/>
+                                        {/* <SimpleLineIcon onPress={() => removeFromTeam(item)} style={[TeamStyles.icon, TeamStyles.iconTrash]} name="trash" color="#fff"/> */}
                                         <SimpleLineIcon onPress={() => replacePlayer(item)} style={[TeamStyles.icon, TeamStyles.iconRefresh]} name="refresh" color="#fff"/>
                                     </TouchableOpacity>
                                 </View>
@@ -164,7 +117,6 @@ const Team = ({ user, navigation }) => {
             title: 'Subs',
             id: 1,
             content: <FlatList
-            extraData={reloadFlatlist}
             contentContainerStyle={TeamStyles.flatList}
             horizontal={false}
             numColumns={2}
@@ -181,7 +133,7 @@ const Team = ({ user, navigation }) => {
                                 </View>
                                 <View>
                                     <TouchableOpacity style={TeamStyles.iconWrapper}>
-                                        <SimpleLineIcon onPress={() => removeFromTeam(item)} style={[TeamStyles.icon, TeamStyles.iconTrash]} name="trash" color="#fff"/>
+                                        {/* <SimpleLineIcon onPress={() => removeFromTeam(item)} style={[TeamStyles.icon, TeamStyles.iconTrash]} name="trash" color="#fff"/> */}
                                         <SimpleLineIcon onPress={() => replacePlayer(item)} style={[TeamStyles.icon, TeamStyles.iconRefresh]} name="refresh" color="#fff"/>
                                     </TouchableOpacity>
                                 </View>
@@ -196,7 +148,7 @@ const Team = ({ user, navigation }) => {
                                 </View>
                                 <View>
                                     <TouchableOpacity style={TeamStyles.iconWrapper}>
-                                        <SimpleLineIcon onPress={() => removeFromTeam(item)} style={[TeamStyles.icon, TeamStyles.iconTrash]} name="trash" color="#fff"/>
+                                        {/* <SimpleLineIcon onPress={() => removeFromTeam(item)} style={[TeamStyles.icon, TeamStyles.iconTrash]} name="trash" color="#fff"/> */}
                                         <SimpleLineIcon onPress={() => replacePlayer(item)} style={[TeamStyles.icon, TeamStyles.iconRefresh]} name="refresh" color="#fff"/>
                                     </TouchableOpacity>
                                 </View>
@@ -239,6 +191,7 @@ const Team = ({ user, navigation }) => {
                 <View>
                     {team.length < 11 || subs.length < 7 ?
                     <View>
+                        {/* add styling */}
                         <Button title="Add player" onPress={() => {
                             setReplacingPlayer(null);
                             setAddingPlayer(true);
@@ -276,12 +229,22 @@ const Team = ({ user, navigation }) => {
             {/* Render buttons here for both stats and replace with close button */}
             <View style={TeamStyles.topContainer}>
                 <Text style={GeneralStyles.pageTitle}>Team</Text>
-                {showingStats || addingPlayer ?
+                {/* {showingStats || addingPlayer ?
                 <Button title="x" onPress={() => {
                     setShowingStats(false);
                     setAddingPlayer(false);
                 }} />:
-                <Button title="Team stats" onPress={() => setShowingStats(true)} />}
+                <Button title="Team stats" onPress={() => setShowingStats(true)} />} */}
+                {showingStats || addingPlayer ?
+                <TouchableOpacity onPress={() => {
+                    setShowingStats(false);
+                    setAddingPlayer(false);
+                }}>
+                    <Text style={[GeneralStyles.button, GeneralStyles.redButton]}>x</Text>
+                </TouchableOpacity>:
+                <TouchableOpacity onPress={() => setShowingStats(true)}>
+                    <Text style={[GeneralStyles.button, GeneralStyles.greenButton]}>Team stats</Text>
+                </TouchableOpacity>}
             </View>
             {showingStats ?
             <TeamStats 
@@ -294,8 +257,7 @@ const Team = ({ user, navigation }) => {
                 team={team}
                 subs={subs}
                 setTeam={setTeam}
-                setSubs={setSubs}
-                isNewPlayerSub={isNewPlayerSub} /> :
+                setSubs={setSubs} /> :
             renderTeam()}
         </View>
     );

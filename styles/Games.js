@@ -30,6 +30,11 @@ const GameStyles = StyleSheet.create({
         display: "flex",
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    motmButton: {
+        width: 30,
+        height: 30,
+        marginLeft: 12.5
     }
 });
 

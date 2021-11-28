@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Text, Button, Image, TouchableOpacity, FlatList, SafeAreaView, Alert } from 'react-native';
+import { View, Text, Button, Image, TouchableOpacity, FlatList, SafeAreaView, Alert, Touchable, ImageBackground } from 'react-native';
 import GeneralStyles from '../../styles/General';
 import GameStyles from '../../styles/Games';
 
@@ -374,27 +374,38 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
         data={fullTeam}
         contentContainerStyle={{paddingBottom: 125}}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => (
-            <View style={[GameStyles.playerFlexbox, GameStyles.parentPlayerFlexbox]} key={index}>
-                <View style={GameStyles.playerFlexbox}>
-                    {!item.isStarting ?
-                     <TouchableOpacity onPress={() => setPlayerActive(item)}>
-                        <Image source={{ uri: item.image }} style={GeneralStyles.playerImg} />
-                    </TouchableOpacity>:
-                    <Image source={{ uri: item.image }} style={GeneralStyles.playerImg} />}
-                    <Text style={GeneralStyles.paragraph}>{item.name.length > 20 ? item.name.substring(0, 20) + "..." : item.name}</Text>
+        renderItem={({item, index}) => {
+            console.log('item.goals', item.goals);
+            return (
+                <View style={[GameStyles.playerFlexbox, GameStyles.parentPlayerFlexbox]} key={index}>
+                    <View style={GameStyles.playerFlexbox}>
+                        {!item.isStarting ?
+                         <TouchableOpacity onPress={() => setPlayerActive(item)}>
+                            <Image source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />
+                        </TouchableOpacity>:
+                        <Image source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />}
+                        <Text style={GeneralStyles.paragraph}>{item.name.length > 14 ? item.name.substring(0, 14) + "..." : item.name}</Text>
+                    </View>
+                    <View style={GameStyles.playerFlexbox}>
+                        {item.goals > 0 || item.assists > 0 ? <TouchableOpacity onPress={() => clearGoalsAssists(item)}><Text style={[GeneralStyles.smallButton, GeneralStyles.redButton]}>x</Text></TouchableOpacity> : null}
+                        <TouchableOpacity style={GeneralStyles.leftMargin} onPress={() => addTeamGoal(item)}>
+                            <Text style={[GeneralStyles.smallButton, GeneralStyles.blueButton]}>{item.goals > 0 ? item.goals.toString() : "G"}</Text>
+                            {/* add text with + or - because after element not possible */}
+                        </TouchableOpacity>
+                        <TouchableOpacity style={GeneralStyles.leftMargin} onPress={() => addTeamAssist(item)}>
+                            <Text style={[GeneralStyles.smallButton, GeneralStyles.blueButton]}>{item.assists > 0 ? item.assists.toString() : "A"}</Text>
+                            {/* add text with + or - because after element not possible */}
+                        </TouchableOpacity>
+                        {item.id === motm ? 
+                        // Add same styling to view as for the button but with active color
+                        <ImageBackground style={GameStyles.motmButton} resizeMode="contain" source={require('../../assets/images/motm-gold.png')}></ImageBackground> :
+                        <TouchableOpacity onPress={() => makePlayerMotm(item)} title="MOTM">
+                            <ImageBackground style={GameStyles.motmButton} resizeMode="contain" source={require('../../assets/images/motm.png')}></ImageBackground>
+                        </TouchableOpacity>}
+                    </View>
                 </View>
-                <View style={GameStyles.playerFlexbox}>
-                    {item.goals > 0 || item.assists > 0 && <Button onPress={() => clearGoalsAssists(item)} title="x" />}
-                    <Button onPress={() => addTeamGoal(item)} title={item.goals > 0 ? item.goals.toString() : "G"} />
-                    <Button onPress={() => addTeamAssist(item)} title={item.assists > 0 ? item.assists.toString() : "A"} />
-                    {item.id === motm ? 
-                    // Add same styling to view as for the button but with active color
-                    <View><Text>Is MOTM</Text></View> :
-                    <Button onPress={() => makePlayerMotm(item)} title="MOTM"/>}
-                </View>
-            </View>
-        )}
+            )
+        }}
         />;
     }
 
@@ -409,6 +420,7 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
             <View>
                 <View style={[GameStyles.scoreLineWrapper, GameStyles.parentScoreLineWrapper]}>
                     <View style={GameStyles.scoreLineWrapper}>
+                        {/* add better styling to scoreline so you can add easy goals for away */}
                         <Text style={GeneralStyles.paragraph}>Scoreline:</Text>
                         <Text style={GeneralStyles.paragraph}>{totalGoals}</Text>
                         <Text style={GeneralStyles.paragraph}>-</Text> 
@@ -425,7 +437,9 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
                             title="-"
                         />}
                     </View>
-                    <Button onPress={submitGame} title="Save game"/>
+                    <TouchableOpacity onPress={submitGame}>
+                        <Text style={[GeneralStyles.button, GeneralStyles.greenButton]}>Save game</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
             <Text style={GeneralStyles.paragraph}>Team</Text>
