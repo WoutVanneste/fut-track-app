@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 export default {
   expo: {
-    name: "FutTrackApp",
+    name: "FIFA 22 FUT Track App",
     slug: "FutTrackApp",
     version: "1.0.0",
     orientation: "portrait",
@@ -10,7 +10,7 @@ export default {
     splash: {
       image: "./assets/splash.png",
       resizeMode: "contain",
-      backgroundColor: "#ffffff"
+      backgroundColor: "#242834"
     },
     updates: {
       fallbackToCacheTimeout: 0
@@ -22,7 +22,7 @@ export default {
     android: {
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
-        backgroundColor: "#FFFFFF"
+        backgroundColor: "#242834"
       }
     },
     web: {
