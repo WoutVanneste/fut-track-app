@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Button, Text, Alert } from 'react-native';
 import GeneralStyles from '../../styles/General';
+import {
+    signOut
+  } from 'firebase/auth';
 
 const Settings = ({ user }) => {
     const [isDeleting, setIsDeleting] = useState(false);
@@ -334,6 +337,7 @@ const Settings = ({ user }) => {
     return (
         <View style={GeneralStyles.pageContainer}>
             <Button title="Remove club data" onPress={() => removeData()}/>
+            <Button title="Logout" onPress={() => signOut()}/>
             <Button title="ad player" onPress={() => setPlayers()}/>
         </View>
     );
