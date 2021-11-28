@@ -378,25 +378,28 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
             <View style={[GameStyles.playerFlexbox, GameStyles.parentPlayerFlexbox]} key={index}>
                 <View style={GameStyles.playerFlexbox}>
                     {!item.isStarting ?
-                     <TouchableOpacity onPress={() => setPlayerActive(item)}>
+                     <TouchableOpacity style={item.id === motm ? [GameStyles.motmWrapper, GameStyles.motmActive] : [GameStyles.motmWrapper, GameStyles.motmNotActive]} onPress={() => setPlayerActive(item)}>
                         <Image source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />
                     </TouchableOpacity>:
-                    <Image source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />}
+                    <View style={item.id === motm ? [GameStyles.motmWrapper, GameStyles.motmActive] : [GameStyles.motmWrapper, GameStyles.motmNotActive]}>
+                        <Image source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />
+                    </View>}
                     <Text style={GeneralStyles.paragraph}>{item.name.length > 14 ? item.name.substring(0, 14) + "..." : item.name}</Text>
                 </View>
                 <View style={GameStyles.playerFlexbox}>
                     {item.goals > 0 || item.assists > 0 ? <TouchableOpacity onPress={() => clearGoalsAssists(item)}><Text style={[GeneralStyles.smallButton, GeneralStyles.redButton]}>x</Text></TouchableOpacity> : null}
-                    <TouchableOpacity style={GeneralStyles.leftMargin} onPress={() => addTeamGoal(item)}>
+                    <TouchableOpacity style={[GeneralStyles.leftMargin, GameStyles.addTextWrapper]} onPress={() => addTeamGoal(item)}>
                         <Text style={[GeneralStyles.smallButton, GeneralStyles.blueButton]}>{item.goals > 0 ? item.goals.toString() : "G"}</Text>
-                        {/* add text with + or - because after element not possible */}
+                        <Text style={GameStyles.addText}>+</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={GeneralStyles.leftMargin} onPress={() => addTeamAssist(item)}>
+                    <TouchableOpacity style={[GeneralStyles.leftMargin, GameStyles.addTextWrapper]} onPress={() => addTeamAssist(item)}>
                         <Text style={[GeneralStyles.smallButton, GeneralStyles.blueButton]}>{item.assists > 0 ? item.assists.toString() : "A"}</Text>
-                        {/* add text with + or - because after element not possible */}
+                        <Text style={GameStyles.addText}>+</Text>
                     </TouchableOpacity>
                     {item.id === motm ? 
-                    // Add same styling to view as for the button but with active color
-                    <ImageBackground style={GameStyles.motmButton} resizeMode="contain" source={require('../../assets/images/motm-gold.png')}></ImageBackground> :
+                    <TouchableOpacity onPress={() => setMotm(0)}>
+                        <ImageBackground style={GameStyles.motmButton} resizeMode="contain" source={require('../../assets/images/motm-gold.png')}></ImageBackground>
+                    </TouchableOpacity> :
                     <TouchableOpacity onPress={() => makePlayerMotm(item)} title="MOTM">
                         <ImageBackground style={GameStyles.motmButton} resizeMode="contain" source={require('../../assets/images/motm.png')}></ImageBackground>
                     </TouchableOpacity>}
@@ -417,22 +420,20 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
             <View>
                 <View style={[GameStyles.scoreLineWrapper, GameStyles.parentScoreLineWrapper]}>
                     <View style={GameStyles.scoreLineWrapper}>
-                        {/* add better styling to scoreline so you can add easy goals for away */}
                         <Text style={GeneralStyles.paragraph}>Scoreline:</Text>
-                        <Text style={GeneralStyles.paragraph}>{totalGoals}</Text>
+                        <Text style={GameStyles.scoreLineText}>{totalGoals}</Text>
                         <Text style={GeneralStyles.paragraph}>-</Text> 
-                        <Text style={GeneralStyles.paragraph} onPress={() => {
+                        <Text style={GameStyles.scoreLineText} onPress={() => {
                             const newAwayGoals = awayGoals + 1;
                             setAwayGoals(newAwayGoals);
                         }}>{awayGoals}</Text>
                         {awayGoals > 0 && 
-                        <Button
-                            onPress={() => {
+                        <TouchableOpacity onPress={() => {
                                 const newAwayGoals = awayGoals - 1;
                                 setAwayGoals(newAwayGoals);
-                            }}
-                            title="-"
-                        />}
+                            }}>
+                            <Text style={[GeneralStyles.smallButton, GeneralStyles.redButton]}>-</Text>
+                        </TouchableOpacity>}
                     </View>
                     <TouchableOpacity onPress={submitGame}>
                         <Text style={[GeneralStyles.button, GeneralStyles.greenButton]}>Save game</Text>

@@ -19,7 +19,8 @@ const GameStyles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     parentPlayerFlexbox: {
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginBottom: 10
     },
     scoreLineWrapper: {
         display: "flex",
@@ -35,6 +36,45 @@ const GameStyles = StyleSheet.create({
         width: 30,
         height: 30,
         marginLeft: 12.5
+    },
+    addText: {
+        position: 'absolute',
+        right: -3.5,
+        top: -3.5,
+        color: '#ffffff',
+        fontSize: 13,
+        lineHeight: 13
+    },
+    addTextWrapper: {
+        position: 'relative'
+    },
+    motmWrapper: {
+        borderWidth: 1.5,
+        borderRadius: 50,
+        overflow: 'hidden',
+        marginRight: 7.5
+    },
+    motmActive: {
+        borderColor: '#FFA000',
+    },
+    motmNotActive: {
+        borderColor: '#242834',
+    },
+    scoreLineText: {
+        margin: 0,
+        color: '#ffffff',
+        fontFamily: 'Rationale_400Regular',
+        fontSize: 16,
+        width: 27.5,
+        height: 27.5,
+        borderWidth: 1,
+        borderColor: '#ffffff',
+        borderRadius: 50,
+        overflow: 'hidden',
+        lineHeight: 27.5,
+        textAlign: 'center',
+        marginLeft: 5,
+        marginRight: 5
     }
 });
 

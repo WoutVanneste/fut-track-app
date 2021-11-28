@@ -46,7 +46,7 @@ const GeneralStyles = StyleSheet.create({
   goalKeeperLabel: {
     position: 'absolute',
     left: 0,
-    bottom: 0,
+    bottom: -2,
     padding: 3,
     backgroundColor: '#C2F655',
     color: '#242834',
@@ -55,8 +55,8 @@ const GeneralStyles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: 13,
-    lineHeight: 13
+    fontSize: 10,
+    lineHeight: 10
   },
   button: {
     borderRadius: 7.5,
@@ -70,11 +70,11 @@ const GeneralStyles = StyleSheet.create({
   smallButton: {
       borderRadius: 7.5,
       overflow: 'hidden',
-      paddingLeft: 10,
-      paddingRight: 10,
-      paddingTop: 7.5,
-      paddingBottom: 7.5,
-      fontSize: 14
+      fontSize: 14,
+      lineHeight: 27.5,
+      textAlign: 'center',
+      width: 27.5,
+      height: 27.5
   },
   greenButton: {
     color: '#242834',
@@ -90,6 +90,22 @@ const GeneralStyles = StyleSheet.create({
   },
   leftMargin: {
     marginLeft: 12.5
+  },
+  settingsTopContainer: {
+    width: '100%'
+  },
+  settingsWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start'
+  },
+  settingsButtonWrapper: {
+    marginTop: 25,
+    alignItems: 'flex-start'
+  },
+  settingsButton: {
+    marginTop: 15
   }
 });
 
