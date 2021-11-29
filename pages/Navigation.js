@@ -35,7 +35,7 @@ const Navigation = ({ user }) => {
               title: 'Overview',
               tabBarIcon: () => (
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                  <SimpleLineIcon style={{fontSize: 18, marginBottom: 5}} name="trophy" color="#fff"/>
+                  <SimpleLineIcon style={{fontSize: 16, marginBottom: 2}} name="trophy" color="#fff"/>
                   <Text style={{fontSize: 12.5, color: '#fff'}}>Overview</Text>
                 </View>
               )
@@ -47,7 +47,7 @@ const Navigation = ({ user }) => {
             options={{
               tabBarIcon: () => (
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                  <SimpleLineIcon style={{fontSize: 18, marginBottom: 5}} name="game-controller" color="#fff"/>
+                  <SimpleLineIcon style={{fontSize: 16, marginBottom: 2}} name="game-controller" color="#fff"/>
                   <Text style={{fontSize: 12.5, color: '#fff'}}>Games</Text>
                 </View>
               )
@@ -60,7 +60,7 @@ const Navigation = ({ user }) => {
               title: "Team",
               tabBarIcon: () => (
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                  <SimpleLineIcon style={{fontSize: 18, marginBottom: 5}} name="people" color="#fff"/>
+                  <SimpleLineIcon style={{fontSize: 16, marginBottom: 2}} name="people" color="#fff"/>
                   <Text style={{fontSize: 12.5, color: '#fff'}}>Team</Text>
                 </View>
               )
@@ -73,7 +73,7 @@ const Navigation = ({ user }) => {
               title: "Settings",
               tabBarIcon: () => (
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <SimpleLineIcon style={{fontSize: 18, marginBottom: 5}} name="settings" color="#fff"/>
+                <SimpleLineIcon style={{fontSize: 16, marginBottom: 2}} name="settings" color="#fff"/>
                 <Text style={{fontSize: 12.5, color: '#fff'}}>Settings</Text>
               </View>
               )
