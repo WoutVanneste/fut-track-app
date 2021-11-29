@@ -384,7 +384,9 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
                             <Image source={{ uri: item.image }} style={GeneralStyles.smallPlayerImg} />
                             {!item.isActive && <View style={GameStyles.notActiveSub} />}
                         </View>}
-                        <Text style={GeneralStyles.paragraph}>{item.name.length > 14 ? item.name.substring(0, 14) + "..." : item.name}</Text>
+                        {!item.isActive ?
+                        <Text style={GameStyles.inActiveName}>{item.name.length > 14 ? item.name.substring(0, 14) + "..." : item.name}</Text>:
+                        <Text style={GeneralStyles.paragraph}>{item.name.length > 14 ? item.name.substring(0, 14) + "..." : item.name}</Text>}
                     </View>
                     <View style={GameStyles.playerFlexbox}>
                         {item.goals > 0 || item.assists > 0 ? <TouchableOpacity onPress={() => clearGoalsAssists(item)}><Text style={[GeneralStyles.smallButton, GeneralStyles.redButton]}>x</Text></TouchableOpacity> : null}

@@ -104,16 +104,24 @@ const Team = ({ user, navigation }) => {
                 <View>
                     {team.length < 11 || subs.length < 7 ?
                     <ScrollView contentContainerStyle={[TeamStyles.listWrapper, TeamStyles.addPlayerButtonWrapper]}>
-                        <TouchableOpacity style={TeamStyles.notCompleteAddButton} onPress={() => {
+                        <Text style={[GeneralStyles.paragraph, TeamStyles.marginBottom]}>You don't have a full team yet!</Text>
+                        <Text style={[GeneralStyles.paragraph, TeamStyles.listTitle]}>Team</Text>
+                        {team.length < 11 && <TouchableOpacity style={TeamStyles.notCompleteAddButton} onPress={() => {
                             setReplacingPlayer(null);
                             setAddingPlayer(true);
-                            setIsNewPlayerSub(team.length < 11 ? false : true);
+                            setIsNewPlayerSub(false);
                         }}>
-                            <Text style={[GeneralStyles.button, GeneralStyles.greenButton]}>Add player</Text>
-                        </TouchableOpacity>
-                        <Text style={[GeneralStyles.paragraph, TeamStyles.listTitle]}>Team</Text>
+                            <Text style={[GeneralStyles.button, GeneralStyles.greenButton]}>Add team player</Text>
+                        </TouchableOpacity>}
                         {renderPlayers(team)}
                         <Text style={[GeneralStyles.paragraph, TeamStyles.listTitle]}>Subs</Text>
+                        {subs.length < 7 && <TouchableOpacity style={TeamStyles.notCompleteAddButton} onPress={() => {
+                            setReplacingPlayer(null);
+                            setAddingPlayer(true);
+                            setIsNewPlayerSub(true);
+                        }}>
+                            <Text style={[GeneralStyles.button, GeneralStyles.greenButton]}>Add sub</Text>
+                        </TouchableOpacity>}
                         {renderPlayers(subs)}
                     </ScrollView> : 
                     <ScrollView contentContainerStyle={TeamStyles.listWrapper}>
@@ -126,13 +134,20 @@ const Team = ({ user, navigation }) => {
             )
         } else {
             return <View style={TeamStyles.addPlayerButtonWrapper}>
-                <Text style={[GeneralStyles.paragraph, TeamStyles.marginBottom]}>You don't have a full team yet!</Text>
+                <Text style={[GeneralStyles.paragraph, TeamStyles.marginBottom]}>You don't have a team yet!</Text>
+                <TouchableOpacity style={{marginBottom: 15}} onPress={() => {
+                    setReplacingPlayer(null);
+                    setAddingPlayer(true);
+                    setIsNewPlayerSub(false);
+                }}>
+                    <Text style={[GeneralStyles.button, GeneralStyles.greenButton]}>Add team player</Text>
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
                     setReplacingPlayer(null);
                     setAddingPlayer(true);
-                    setIsNewPlayerSub(team.length < 11 ? false : true);
+                    setIsNewPlayerSub(true);
                 }}>
-                    <Text style={[GeneralStyles.button, GeneralStyles.greenButton]}>Add player</Text>
+                    <Text style={[GeneralStyles.button, GeneralStyles.greenButton]}>Add sub</Text>
                 </TouchableOpacity>
             </View>
         }

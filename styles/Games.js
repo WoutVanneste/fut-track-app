@@ -98,6 +98,12 @@ const GameStyles = StyleSheet.create({
     listTitle: {
         marginBottom: 10
     },
+    inActiveName: {
+        margin: 0,
+        color: '#808080',
+        fontFamily: 'Rationale_400Regular',
+        fontSize: 16
+    }
 });
 
 export default GameStyles

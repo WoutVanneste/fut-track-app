@@ -64,13 +64,18 @@ const Settings = ({ user }) => {
         const db = getFirestore(firebaseApp)
         getGames(db);
     }
+    
     // Return statements
     if (isLoading) {
-        return <Text style={GeneralStyles.paragraph}>Loading players...</Text>;
+        return <View style={GeneralStyles.pageContainer}>
+            <Text style={GeneralStyles.paragraph}>Updating players...</Text>
+        </View>
     }
 
     if (isDeleting) {
-        return <Text style={GeneralStyles.paragraph}>Deleting club data...</Text>;
+        return <View style={GeneralStyles.pageContainer}>
+            <Text style={GeneralStyles.paragraph}>Deleting club data...</Text>
+        </View>
     }
 
     return (
