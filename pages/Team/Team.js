@@ -15,12 +15,18 @@ const Team = ({ user, navigation }) => {
     const [loading, setLoading] = useState(false);
     const [replacingPlayer, setReplacingPlayer] = useState(null);
     const [isNewPlayerSub, setIsNewPlayerSub] = useState(false);
+    const [teamHasGoalKeeper, setTeamHasGoalKeeper] = useState(false);
  
     useEffect(() => {
         const getData = async () => {
             setLoading(true);
             try {
                 const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-team`);
+                if (jsonValue != null) {
+                    if (JSON.parse(jsonValue).team.length === 11) {
+                        setTeamHasGoalKeeper(true);
+                    }
+                }
                 setTeam(jsonValue != null ? JSON.parse(jsonValue).team : []);
                 setSubs(jsonValue != null ? JSON.parse(jsonValue).subs : []);
             } catch(e) {
@@ -45,6 +51,11 @@ const Team = ({ user, navigation }) => {
     }, []);
 
     const replacePlayer = player => {
+        if (player.isGoalKeeper) {
+            setTeamHasGoalKeeper(false);
+        } else {
+            setTeamHasGoalKeeper(true);
+        }
         setReplacingPlayer(player);
         setAddingPlayer(true);
     }
@@ -159,7 +170,9 @@ const Team = ({ user, navigation }) => {
                 subs={subs}
                 setTeam={setTeam}
                 setSubs={setSubs}
-                isNewPlayerSub={isNewPlayerSub} /> :
+                isNewPlayerSub={isNewPlayerSub}
+                teamHasGoalKeeper={teamHasGoalKeeper}
+                setTeamHasGoalKeeper={setTeamHasGoalKeeper} /> :
             renderTeam()}
         </View>
     );

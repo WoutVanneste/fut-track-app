@@ -1,13 +1,6 @@
 import { StyleSheet } from 'react-native'; 
 
 const TeamStyles = StyleSheet.create({
-    collapseTitle: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingTop: 5,
-        paddingBottom: 5,
-    },
     playerInfo: {
         width: '100%',
         display: 'flex',
@@ -117,14 +110,6 @@ const TeamStyles = StyleSheet.create({
     },
     notCompleteAddButton: {
         marginBottom: 10
-    },
-    containerStyle: {
-        width: '100%'
-    },
-    scrollView: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        flexDirection: 'column'
     }
 });
 

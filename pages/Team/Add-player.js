@@ -5,7 +5,7 @@ import GeneralStyles from '../../styles/General';
 import TeamStyles from '../../styles/Team';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 
-const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs, isNewPlayerSub }) => {
+const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs, isNewPlayerSub, teamHasGoalKeeper, setTeamHasGoalKeeper }) => {
     const [playerList, setPlayerList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [playerSearch, setPlayerSearch] = useState("");
@@ -50,6 +50,9 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
             }
             if (isNewPlayerSub) {
                 let newSubs = subs;
+                if (newPlayerObject.isGoalKeeper) {
+                    setTeamHasGoalKeeper(true);
+                }
                 newSubs.push(newPlayerObject);
                 const saveLocalData = async () => {
                     const fullTeam = {
@@ -67,6 +70,9 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
                 setSubs(newSubs);
             } else {
                 let newTeam = team;
+                if (newPlayerObject.isGoalKeeper) {
+                    setTeamHasGoalKeeper(true);
+                }
                 newTeam.push(newPlayerObject);
                 const saveLocalData = async () => {
                     const fullTeam = {
@@ -104,6 +110,9 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
             if (containsObject(player, team)) {
                 let newTeam = team;
                 const index = team.findIndex(teamPlayer => teamPlayer.id === player.id);
+                if (newPlayerObject.isGoalKeeper) {
+                    setTeamHasGoalKeeper(true);
+                }
                 newTeam[index] = newPlayerObject;
                 const saveLocalData = async () => {
                     const fullTeam = {
@@ -125,6 +134,9 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
             if (containsObject(player, subs)) {
                 let newSubs = subs;
                 const index = subs.findIndex(subsPlayer => subsPlayer.id === player.id);
+                if (newPlayerObject.isGoalKeeper) {
+                    setTeamHasGoalKeeper(true);
+                }
                 newSubs[index] = newPlayerObject;
                 const saveLocalData = async () => {
                     const fullTeam = {
@@ -158,22 +170,29 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
     }
 
     const getPlayerData = () => {
-        let filteredPlayers = [];
-        if (playerSearch.length === 0) {
-            filteredPlayers = playerList.sort((a, b) => a.rating < b.rating ? 1 : -1).slice(0, 50);
-        } else {
-            filteredPlayers = playerList.filter(player => player.searchName.toLowerCase().includes(playerSearch.toLowerCase()) || player.name.toLowerCase().includes(playerSearch.toLowerCase()));
-        }
+        let filteredPlayers = filteredPlayers = playerList.filter(player => player.searchName.toLowerCase().includes(playerSearch.toLowerCase()) || player.name.toLowerCase().includes(playerSearch.toLowerCase())).sort((a, b) => a.rating < b.rating ? 1 : -1);
         const teamExcludedPlayers = filteredPlayers.filter(player1 => !team.some(player2 => player1.id === player2.id));
         const subsExcludedPlayers = teamExcludedPlayers.filter(player1 => !subs.some(player2 => player1.id === player2.id));
-        const sortedPlayers = subsExcludedPlayers.sort((a, b) => a.rating < b.rating ? 1 : -1)
-        return sortedPlayers;
+        let goalKeeperFiltered = subsExcludedPlayers;
+        if (teamHasGoalKeeper) {
+            goalKeeperFiltered = subsExcludedPlayers.filter(player => !player.isGoalKeeper)
+        }
+        let onlyGoalKeepers = goalKeeperFiltered;
+        if ((team.length === 10 || team.length === 11) && !teamHasGoalKeeper) {
+            onlyGoalKeepers = goalKeeperFiltered.filter(player => player.isGoalKeeper);
+        }
+        let toReturnPlayers = onlyGoalKeepers;
+        if (playerSearch.length === 0) {
+            toReturnPlayers = onlyGoalKeepers.slice(0, 50)
+        }
+        return toReturnPlayers;
     }
 
     const renderPlayerInput = () => {
         return (
             <View>
                 <Text style={GeneralStyles.paragraph}>Search for a player here</Text>
+                {(team.length === 10 || team.length === 11) && !teamHasGoalKeeper && <Text style={GeneralStyles.paragraph}>Please select a goalkeeper for your team</Text>}
                 <TextInput style={TeamStyles.searchPlayerInput} onChangeText={setPlayerSearch} value={playerSearch} />
                 {getPlayerData().length > 0 ? 
                 <ScrollView contentContainerStyle={[TeamStyles.searchListWrapper, TeamStyles.listItem]}>

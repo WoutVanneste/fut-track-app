@@ -1,9 +1,6 @@
 import { StyleSheet } from 'react-native'; 
 
 const AuthenticationStyles = StyleSheet.create({
-    pageWrapper: {
-
-    },
     input: {
         backgroundColor: "#ffffff",
         marginTop: 15,
