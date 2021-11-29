@@ -174,7 +174,7 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
         const teamExcludedPlayers = filteredPlayers.filter(player1 => !team.some(player2 => player1.id === player2.id));
         const subsExcludedPlayers = teamExcludedPlayers.filter(player1 => !subs.some(player2 => player1.id === player2.id));
         let goalKeeperFiltered = subsExcludedPlayers;
-        if (teamHasGoalKeeper) {
+        if (teamHasGoalKeeper && team.length < 11) {
             goalKeeperFiltered = subsExcludedPlayers.filter(player => !player.isGoalKeeper)
         }
         let onlyGoalKeepers = goalKeeperFiltered;

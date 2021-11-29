@@ -2,8 +2,8 @@ import 'dotenv/config';
 
 export default {
   expo: {
-    name: "FIFA 22 FUT Track App",
-    slug: "FutTrackApp",
+    name: "FUT Track",
+    slug: "FutTrack",
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
@@ -20,7 +20,7 @@ export default {
       supportsTablet: true
     },
     android: {
-      package: "com.woutvanneste.fifa22futtrackapp",
+      package: "com.woutvanneste.fifa22futtrack",
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#242834"
