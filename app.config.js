@@ -20,6 +20,7 @@ export default {
       supportsTablet: true
     },
     android: {
+      package: "com.woutvanneste.fifa22futtrackapp",
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#242834"

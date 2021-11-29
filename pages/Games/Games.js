@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Text, Button, FlatList, SafeAreaView, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
 import AddGame from './Add-game';
 import GeneralStyles from '../../styles/General';
 import GameStyles from '../../styles/Games';
@@ -56,10 +56,8 @@ const Games = ({ navigation, user }) => {
     const renderGames = () => {
         if (allTimeGames.length > 0) {
             const sortedGames = allTimeGames.sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime))
-            return <FlatList
-                data={sortedGames}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({item, index}) => (
+            return <ScrollView>
+                {sortedGames.map((item, index) => (
                     <View key={index} style={GameStyles.gameWrapper}>
                         {renderGameIcon(item.result)}
                         <View>
@@ -67,7 +65,8 @@ const Games = ({ navigation, user }) => {
                             <Text style={GeneralStyles.paragraph}>Date: {new Date(item.dateTime).toLocaleString().toString()}</Text>
                         </View>
                     </View>
-                )} />
+                ))}
+            </ScrollView>
         } else {
             return <Text style={GeneralStyles.paragraph}>No games played so far.</Text>;
         }

@@ -5,7 +5,7 @@ const GeneralStyles = StyleSheet.create({
     paddingTop: 35,
     paddingLeft: 12.5,
     paddingRight: 12.5,
-    paddingBottom: 80,
+    paddingBottom: 65,
     backgroundColor: '#242834',
     color: '#ffffff',
     height: '100%',
@@ -33,7 +33,7 @@ const GeneralStyles = StyleSheet.create({
     marginBottom: 15,
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     flexDirection: 'row'
   },
   playerImg: {

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Text, TextInput, FlatList, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, ScrollView } from 'react-native';
 import GeneralStyles from '../../styles/General';
 import TeamStyles from '../../styles/Team';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 
-const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs }) => {
+const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs, isNewPlayerSub }) => {
     const [playerList, setPlayerList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [playerSearch, setPlayerSearch] = useState("");
@@ -32,63 +32,118 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs 
     }, []);
 
     const replacePlayer = newPlayer => {
-        const newPlayerObject = {
-            assists: 0,
-            cleanSheets: 0,
-            games: 0,
-            goals: 0,
-            id: newPlayer.id,
-            image: newPlayer.image,
-            isActive: player.isActive,
-            isGoalKeeper: newPlayer.isGoalKeeper,
-            isStarting: player.isStarting,
-            motms: 0,
-            name: newPlayer.name,
-            rating: newPlayer.rating,
-            searchName: newPlayer.searchName,
-        }
-        if (containsObject(player, team)) {
-            let newTeam = team;
-            const index = team.findIndex(teamPlayer => teamPlayer.id === player.id);
-            newTeam[index] = newPlayerObject;
-            const saveLocalData = async () => {
-                const fullTeam = {
-                    team: newTeam,
-                    subs: subs
-                };
-                try {
-                    const jsonValue = JSON.stringify(fullTeam)
-                    await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
-                } catch (e) {
-                    console.error('Failed to save team', e);
-                }
+        if (!player) {
+            const newPlayerObject = {
+                assists: 0,
+                cleanSheets: 0,
+                games: 0,
+                goals: 0,
+                id: newPlayer.id,
+                image: newPlayer.image,
+                isActive: isNewPlayerSub ? false : true,
+                isGoalKeeper: newPlayer.isGoalKeeper,
+                isStarting: isNewPlayerSub ? false : true,
+                motms: 0,
+                name: newPlayer.name,
+                rating: newPlayer.rating,
+                searchName: newPlayer.searchName,
             }
-            saveLocalData();
-            setTeam(newTeam);
+            if (isNewPlayerSub) {
+                let newSubs = subs;
+                newSubs.push(newPlayerObject);
+                const saveLocalData = async () => {
+                    const fullTeam = {
+                        team: team,
+                        subs: newSubs
+                    };
+                    try {
+                        const jsonValue = JSON.stringify(fullTeam)
+                        await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
+                    } catch (e) {
+                        console.error('Failed to save team', e);
+                    }
+                }
+                saveLocalData();
+                setSubs(newSubs);
+            } else {
+                let newTeam = team;
+                newTeam.push(newPlayerObject);
+                const saveLocalData = async () => {
+                    const fullTeam = {
+                        team: newTeam,
+                        subs: subs
+                    };
+                    try {
+                        const jsonValue = JSON.stringify(fullTeam)
+                        await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
+                    } catch (e) {
+                        console.error('Failed to save team', e);
+                    }
+                }
+                saveLocalData();
+                setTeam(newTeam);
+            }
             setAddingPlayer(false);
             return;
-        }
-        if (containsObject(player, subs)) {
-            let newSubs = subs;
-            const index = subs.findIndex(subsPlayer => subsPlayer.id === player.id);
-            newSubs[index] = newPlayerObject;
-            const saveLocalData = async () => {
-                const fullTeam = {
-                    team: team,
-                    subs: newSubs
-                };
-                try {
-                    const jsonValue = JSON.stringify(fullTeam)
-                    await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
-                } catch (e) {
-                    console.error('Failed to save team', e);
-                }
+        } else {
+            const newPlayerObject = {
+                assists: 0,
+                cleanSheets: 0,
+                games: 0,
+                goals: 0,
+                id: newPlayer.id,
+                image: newPlayer.image,
+                isActive: player.isActive,
+                isGoalKeeper: newPlayer.isGoalKeeper,
+                isStarting: player.isStarting,
+                motms: 0,
+                name: newPlayer.name,
+                rating: newPlayer.rating,
+                searchName: newPlayer.searchName,
             }
-
-            saveLocalData();
-            setSubs(newSubs);
-            setAddingPlayer(false);
-            return;
+            if (containsObject(player, team)) {
+                let newTeam = team;
+                const index = team.findIndex(teamPlayer => teamPlayer.id === player.id);
+                newTeam[index] = newPlayerObject;
+                const saveLocalData = async () => {
+                    const fullTeam = {
+                        team: newTeam,
+                        subs: subs
+                    };
+                    try {
+                        const jsonValue = JSON.stringify(fullTeam)
+                        await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
+                    } catch (e) {
+                        console.error('Failed to save team', e);
+                    }
+                }
+                saveLocalData();
+                setTeam(newTeam);
+                setAddingPlayer(false);
+                return;
+            }
+            if (containsObject(player, subs)) {
+                let newSubs = subs;
+                const index = subs.findIndex(subsPlayer => subsPlayer.id === player.id);
+                newSubs[index] = newPlayerObject;
+                const saveLocalData = async () => {
+                    const fullTeam = {
+                        team: team,
+                        subs: newSubs
+                    };
+                    try {
+                        const jsonValue = JSON.stringify(fullTeam)
+                        await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
+                    } catch (e) {
+                        console.error('Failed to save team', e);
+                    }
+                }
+    
+                saveLocalData();
+                setSubs(newSubs);
+                setAddingPlayer(false);
+                return;
+            }
         }
     }
 
@@ -103,28 +158,26 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs 
     }
 
     const getPlayerData = () => {
-        const value = playerSearch;
-        let filteredPlayers =  playerList.filter(player => player.searchName.toLowerCase().includes(value.toLowerCase()) || player.name.toLowerCase().includes(value.toLowerCase()));
-        const teamExcludedPlayers = filteredPlayers.filter(player => !containsObject(player, team));
-        const subsExcludedPlayers = teamExcludedPlayers.filter(player => !containsObject(player, subs));
+        let filteredPlayers = [];
+        if (playerSearch.length === 0) {
+            filteredPlayers = playerList.sort((a, b) => a.rating < b.rating ? 1 : -1).slice(0, 50);
+        } else {
+            filteredPlayers = playerList.filter(player => player.searchName.toLowerCase().includes(playerSearch.toLowerCase()) || player.name.toLowerCase().includes(playerSearch.toLowerCase()));
+        }
+        const teamExcludedPlayers = filteredPlayers.filter(player1 => !team.some(player2 => player1.id === player2.id));
+        const subsExcludedPlayers = teamExcludedPlayers.filter(player1 => !subs.some(player2 => player1.id === player2.id));
         const sortedPlayers = subsExcludedPlayers.sort((a, b) => a.rating < b.rating ? 1 : -1)
         return sortedPlayers;
     }
 
     const renderPlayerInput = () => {
         return (
-            <View style={TeamStyles.searchWrapper}>
+            <View>
                 <Text style={GeneralStyles.paragraph}>Search for a player here</Text>
                 <TextInput style={TeamStyles.searchPlayerInput} onChangeText={setPlayerSearch} value={playerSearch} />
-                {playerSearch.length > 0 && 
-                <FlatList
-                data={getPlayerData()}
-                horizontal={false}
-                contentContainerStyle={{paddingBottom: 100}}
-                numColumns={2}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({item, index}) => (
-                    <View style={[TeamStyles.listItem, index%2===0 ? TeamStyles.leftItem : TeamStyles.rightItem]} key={index}>
+                {getPlayerData().length > 0 ? 
+                <ScrollView contentContainerStyle={[TeamStyles.searchListWrapper, TeamStyles.listItem]}>
+                    {getPlayerData().map((item, index) => <View style={[TeamStyles.playerListItem, index%2===0 ? TeamStyles.leftItem : TeamStyles.rightItem]} key={index}>
                         {item.isGoalKeeper ?
                         <View style={TeamStyles.playerItem}>
                             <View style={TeamStyles.playerInfo}>
@@ -154,8 +207,9 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs 
                             </View>
                             <Text style={TeamStyles.playerName}>{item.name.length > 20 ? item.name.substring(0, 20) + "..." : item.name}</Text>
                         </View>}
-                    </View>
-                )}/>}
+                    </View>)}
+                </ScrollView> :
+                <Text style={GeneralStyles.paragraph}>No players found, please refine your search.</Text>}
             </View>
         )
     }

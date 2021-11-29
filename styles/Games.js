@@ -16,11 +16,13 @@ const GameStyles = StyleSheet.create({
         marginBottom: 20
     },
     parentScoreLineWrapper: {
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        paddingBottom: 10
     },
     parentPlayerFlexbox: {
         justifyContent: 'space-between',
-        position: 'relative'
+        position: 'relative',
+        marginBottom: 2.5
     },
     scoreLineWrapper: {
         display: "flex",
@@ -85,7 +87,17 @@ const GameStyles = StyleSheet.create({
         left: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.25)',
         flex: 1,
-    }
+    },
+    listWrapper: {
+        paddingBottom: 65
+    },
+    listItem: {
+        width: '100%',
+        marginBottom: 20,
+    },
+    listTitle: {
+        marginBottom: 10
+    },
 });
 
 export default GameStyles

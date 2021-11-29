@@ -21,8 +21,7 @@ const Settings = ({ user }) => {
             const dataKeys = [
                 `user-${user.uid}-all-time-games`,
                 `user-${user.uid}-all-time-player-stats`,
-                `user-${user.uid}-team`,
-                `user-${user.uid}-player-list`
+                `user-${user.uid}-team`
             ];
             await AsyncStorage.multiRemove(dataKeys);
         } catch (e) {

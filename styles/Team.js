@@ -1,9 +1,6 @@
 import { StyleSheet } from 'react-native'; 
 
 const TeamStyles = StyleSheet.create({
-    flatList: {
-        paddingBottom: 30,
-    },
     collapseTitle: {
         display: 'flex',
         flexDirection: 'row',
@@ -18,15 +15,28 @@ const TeamStyles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-end',
     },
+    searchListWrapper: {
+        paddingBottom: 115
+    },
+    listWrapper: {
+        paddingBottom: 25
+    },
     listItem: {
-        width: '45%',
+        width: '100%',
         marginBottom: 20,
         display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start'
+        flexWrap: 'wrap',
+        flexDirection: 'row'
+    },
+    playerListItem: {
+        width: '45%',
+        marginBottom: 15
     },
     rightItem: {
         marginLeft: '5%'
+    },
+    listTitle: {
+        marginBottom: 10
     },
     playerItem: {
         display: 'flex',
@@ -77,7 +87,8 @@ const TeamStyles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'flex-start',
+        marginBottom: 15
     },
     playerStatsFlex: {
         display: 'flex',
@@ -93,14 +104,27 @@ const TeamStyles = StyleSheet.create({
         marginBottom: 25,
         marginLeft: 10
     },
-    playerStatsContainer: {
-        paddingTop: 25
-    },
     playerInfoText: {
         marginTop: 5
     },
-    searchWrapper: {
-        marginTop: 25
+    marginBottom: {
+        marginBottom: 10
+    },
+    addPlayerButtonWrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start'
+    },
+    notCompleteAddButton: {
+        marginBottom: 10
+    },
+    containerStyle: {
+        width: '100%'
+    },
+    scrollView: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        flexDirection: 'column'
     }
 });
 

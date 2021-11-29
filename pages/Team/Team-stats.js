@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Text, FlatList, Image, SafeAreaView } from 'react-native';
+import { View, Text, Image, ScrollView } from 'react-native';
 import GeneralStyles from '../../styles/General';
 import TeamStyles from '../../styles/Team';
 
@@ -42,14 +42,10 @@ const TeamStats = ({user}) => {
              return a.games < b.games ? 1 : -1;
         });
         return (
-            <SafeAreaView style={TeamStyles.playerStatsContainer}>
-                <FlatList
-                    data={sortedTeam}
-                    contentContainerStyle={{paddingBottom: 10}}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({item, index}) => (
-                        <View style={TeamStyles.playerStatsWrapper}>
-                            {item.isGoalKeeper ?
+            <ScrollView>
+                {sortedTeam.map((item, index) => (
+                    <View key={index} style={TeamStyles.playerStatsWrapper}>
+                        {item.isGoalKeeper ?
                             <View style={TeamStyles.playerItem}>
                                 <View style={TeamStyles.playerStatsFlex}>
                                     <View style={TeamStyles.playerStatsFlex}>
@@ -90,10 +86,8 @@ const TeamStats = ({user}) => {
                                     </View>
                                 </View>
                             </View>}
-                        </View>
-                    )}
-                    />
-            </SafeAreaView>
+                    </View>))}
+            </ScrollView>
         )
     }
 
