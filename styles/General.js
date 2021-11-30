@@ -11,31 +11,16 @@ const GeneralStyles = StyleSheet.create({
     height: '100%',
     fontFamily: 'Rationale_400Regular'
   },
+  pageTitle: {
+    fontSize: 30,
+    color: '#ffffff',
+    fontFamily: 'Rationale_400Regular'
+  },
   paragraph: {
     margin: 0,
     color: '#ffffff',
     fontFamily: 'Rationale_400Regular',
     fontSize: 16
-  },
-  pageContainerApp: {
-    backgroundColor: '#242834',
-    color: '#ffffff',
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  paragraphApp: {
-    margin: 0,
-    color: '#ffffff',
-    fontSize: 16,
-    textAlign: 'center'
-  },
-  pageTitle: {
-    fontSize: 30,
-    color: '#ffffff',
-    fontFamily: 'Rationale_400Regular'
   },
   topContainer: {
     marginBottom: 25,

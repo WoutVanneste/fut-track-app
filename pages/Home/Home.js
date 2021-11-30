@@ -220,32 +220,20 @@ const Home = ({ user, navigation }) => {
             lastGames.forEach((game, index) => {
                 switch (game.result) {
                     case 1:
-                        if (index %2===0) {
-                            list.push(<ImageBackground key={index} resizeMode="contain" style={HomeStyles.last5GamesImg} source={require('../../assets/images/green-up-single.png')} />)
-                        } else {
-                            list.push(<ImageBackground key={index} resizeMode="contain" style={HomeStyles.last5GamesImg} source={require('../../assets/images/green-down-single.png')} />)
-                        }
+                        list.push(<View key={index}></View>)
                         break;
                     case 2:
-                        if (index %2===0) {
-                            list.push(<ImageBackground key={index} resizeMode="contain" style={HomeStyles.last5GamesImg} source={require('../../assets/images/blue-up-single.png')} />)
-                        } else {
-                            list.push(<ImageBackground key={index} resizeMode="contain" style={HomeStyles.last5GamesImg} source={require('../../assets/images/blue-down-single.png')} />)
-                        }
+                        list.push(<View key={index}></View>)
                         break;
                     case 3:
-                        if (index %2===0) {
-                            list.push(<ImageBackground key={index} resizeMode="contain" style={HomeStyles.last5GamesImg} source={require('../../assets/images/red-up-single.png')} />)
-                        } else {
-                            list.push(<ImageBackground key={index} resizeMode="contain" style={HomeStyles.last5GamesImg} source={require('../../assets/images/red-down-single.png')} />)
-                        }
+                        list.push(<View key={index}></View>)
                         break;
                 }
             })
 
-            return <View style={HomeStyles.last5Wrapper}>
+            return <View >
                 <Text style={HomeStyles.subTitle}>Last 5 games</Text>
-                <View style={HomeStyles.last5GamesWrapper}>
+                <View>
                     {list.map(item => item)}
                 </View>
             </View>
@@ -258,40 +246,21 @@ const Home = ({ user, navigation }) => {
                 goals: 0,
                 awayGoals: 1000
             };
-            let biggestLoss = {
-                goals: 1000,
-                awayGoals: 0
-            }
             let cleanSheets = 0;
-            let averageGoalsScored = 0;
-            let averageGoalsConceded = 0;
             allTimeGames.forEach(game => {
                 if (game.goalsConceded === 0) {
                     cleanSheets++;
                 }
-                const winDiff = game.goalsScored - game.goalsConceded;
-                if (winDiff > (biggestWin.goals - biggestWin.awayGoals)) {
+                const diff = game.goalsScored - game.goalsConceded;
+                if (diff > (biggestWin.goals - biggestWin.awayGoals)) {
                     biggestWin.goals = game.goalsScored;
                     biggestWin.awayGoals = game.goalsConceded;
                 }
-                const lossDiff = game.goalsConceded - game.goalsScored;
-                if (lossDiff > (biggestLoss.awayGoals - biggestLoss.goals)) {
-                    biggestLoss.goals = game.goalsScored;
-                    biggestLoss.awayGoals = game.goalsConceded;
-                }
-                averageGoalsScored += game.goalsScored;
-                averageGoalsConceded += game.goalsConceded;
             })
-            averageGoalsScored = Math.round(averageGoalsScored / allTimeGames.length);
-            averageGoalsConceded = Math.round(averageGoalsConceded / allTimeGames.length);
             const bestResult = <Text style={HomeStyles.homeText}>Best result: {biggestWin.goals} - {biggestWin.awayGoals}</Text>
-            const worstResult = <Text style={HomeStyles.homeText}>Worst result: {biggestLoss.goals} - {biggestLoss.awayGoals}</Text>
-            const averageResult = <Text style={HomeStyles.homeText}>Average result: {averageGoalsScored} - {averageGoalsConceded}</Text>
             const cleanSheetsElement = <Text style={HomeStyles.homeText}>Cleansheets: {cleanSheets}</Text>
             return <View>
                 {bestResult}
-                {worstResult}
-                {averageResult}
                 {cleanSheetsElement}
             </View>
         }

@@ -11,21 +11,6 @@ const HomeStyles = StyleSheet.create({
     imageBackgroundLast : {
         marginLeft: 10
     },
-    last5GamesImg: {
-        width: 25,
-        height: 25,
-        marginLeft: -2
-    },
-    last5Wrapper: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    last5GamesWrapper: {
-        display: 'flex',
-        flexDirection: 'row'
-    },
     drawsText: {
         marginBottom: 10,
         marginTop: 0,
