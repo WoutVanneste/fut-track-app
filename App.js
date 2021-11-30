@@ -9,11 +9,12 @@ import { initializeApp } from 'firebase/app';
 import Constants from 'expo-constants';
 import Login from './pages/Authentication/Login';
 import Navigation from './pages/Navigation';
+import { ActivityIndicator, Text, View } from 'react-native';
+import GeneralStyles from './styles/General';
 import {
   useFonts,
   Rationale_400Regular,
 } from '@expo-google-fonts/rationale';
-import { Text } from 'react-native';
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -31,21 +32,29 @@ const auth = getAuth();
 
 const App = () => {
   const [authenticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
   let [fontsLoaded] = useFonts({
     Rationale_400Regular,
   });
-
+  
   onAuthStateChanged(auth, user => {
     if (user != null) {
-      setUser(user);
-      setAuthenticated(true)
+        setUser(user);
+        setAuthenticated(true);
+        setLoading(false);
+    }
+    if (user === null) {
+      setAuthenticated(false);
+      setLoading(false);
     }
   });
 
-  if (!fontsLoaded) {
-    return <Text>Loading styles...</Text>
+  if (loading || !fontsLoaded) {
+    return <View style={GeneralStyles.pageContainerApp}>
+      <ActivityIndicator size="large" color="#C2F655" />
+      </View>
   }
 
   if (!authenticated) {

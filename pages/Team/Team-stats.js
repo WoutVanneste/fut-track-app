@@ -57,7 +57,7 @@ const TeamStats = ({user}) => {
                                         <View style={TeamStyles.playerStatsFlex}>
                                             <Text style={[GeneralStyles.paragraph, TeamStyles.playerInfoText]}>{item.games} games -</Text>
                                             <Text style={[GeneralStyles.paragraph, TeamStyles.playerInfoText]}>{item.goals} goals -</Text>
-                                            <Text style={[GeneralStyles.paragraph, TeamStyles.playerInfoText]}>{item.asssists} assists</Text>
+                                            <Text style={[GeneralStyles.paragraph, TeamStyles.playerInfoText]}>{item.assists} assists</Text>
                                         </View>
                                         <View style={TeamStyles.playerStatsFlex}>
                                             <Text style={[GeneralStyles.paragraph, TeamStyles.playerInfoText]}>{item.motms} MOTMS -</Text>
@@ -77,7 +77,7 @@ const TeamStats = ({user}) => {
                                         <View style={TeamStyles.playerStatsFlex}>
                                             <Text style={[GeneralStyles.paragraph, TeamStyles.playerInfoText]}>{item.games} games -</Text>
                                             <Text style={[GeneralStyles.paragraph, TeamStyles.playerInfoText]}>{item.goals} goals -</Text>
-                                            <Text style={[GeneralStyles.paragraph, TeamStyles.playerInfoText]}>{item.asssists} assists</Text>
+                                            <Text style={[GeneralStyles.paragraph, TeamStyles.playerInfoText]}>{item.assists} assists</Text>
                                         </View>
                                         <View style={TeamStyles.playerStatsFlex}>
                                             <Text style={[GeneralStyles.paragraph, TeamStyles.playerInfoText]}>{item.motms} MOTMS -</Text>
