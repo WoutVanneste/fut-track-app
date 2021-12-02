@@ -6,6 +6,8 @@ import GeneralStyles from '../../styles/General';
 import TeamStyles from '../../styles/Team';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import AddPlayer from './Add-player';
+import { getDocs, collection, getFirestore } from '@firebase/firestore/lite';
+import { firebaseApp } from '../../App';
 
 const Team = ({ user, navigation }) => {
     const [team, setTeam] = useState([]);
@@ -16,19 +18,40 @@ const Team = ({ user, navigation }) => {
     const [replacingPlayer, setReplacingPlayer] = useState(null);
     const [isNewPlayerSub, setIsNewPlayerSub] = useState(false);
     const [teamHasGoalKeeper, setTeamHasGoalKeeper] = useState(false);
+
+    const getTeam = async () => {
+        const userCollection = collection(db, 'users');
+        const documents = await getDocs(userCollection);
+        const allData = documents.docs.map(doc => doc.data())[0];
+
+        try {
+            const jsonValue = JSON.stringify(allData.team)
+            await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
+            if (allData.team.team.length === 11) {
+                setTeamHasGoalKeeper(true);
+            }
+            setTeam(allData.team.team);
+            setSubs(allData.team.subs);
+        } catch (e) {
+            console.error('Failed to get team', e);
+        }
+    }
  
     useEffect(() => {
         const getData = async () => {
             setLoading(true);
             try {
                 const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-team`);
-                if (jsonValue != null) {
+                if (jsonValue !== null) {
                     if (JSON.parse(jsonValue).team.length === 11) {
                         setTeamHasGoalKeeper(true);
                     }
+                    setTeam(JSON.parse(jsonValue).team);
+                    setSubs(JSON.parse(jsonValue).subs);
+                } else {
+                    const db = getFirestore(firebaseApp);
+                    getTeam(db);
                 }
-                setTeam(jsonValue != null ? JSON.parse(jsonValue).team : []);
-                setSubs(jsonValue != null ? JSON.parse(jsonValue).subs : []);
             } catch(e) {
                 console.error('Error getting team', e);
             }
@@ -99,7 +122,7 @@ const Team = ({ user, navigation }) => {
     }
 
     const renderTeam = () => {
-        if (team.length != 0 || subs.length != 0) {
+        if (team.length !== 0 || subs.length !== 0) {
             return (
                 <View>
                     {team.length < 11 || subs.length < 7 ?

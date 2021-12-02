@@ -40,7 +40,7 @@ const App = () => {
   });
   
   onAuthStateChanged(auth, user => {
-    if (user != null) {
+    if (user !== null) {
         setUser(user);
         setAuthenticated(true);
         setLoading(false);

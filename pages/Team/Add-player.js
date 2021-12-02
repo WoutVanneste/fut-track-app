@@ -4,18 +4,38 @@ import { View, Text, TextInput, Image, TouchableOpacity, ScrollView } from 'reac
 import GeneralStyles from '../../styles/General';
 import TeamStyles from '../../styles/Team';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
+import { getDocs, collection, getFirestore } from '@firebase/firestore/lite';
+import { firebaseApp } from '../../App';
 
 const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs, isNewPlayerSub, teamHasGoalKeeper, setTeamHasGoalKeeper }) => {
     const [playerList, setPlayerList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [playerSearch, setPlayerSearch] = useState("");
 
+    const getPlayers = async () => {
+        const playerCollection = collection(db, 'players');
+        const documents = await getDocs(playerCollection);
+        const docData = documents.docs.map(doc => doc.data());
+        try {
+            const jsonValue = JSON.stringify(docData)
+            await AsyncStorage.setItem(`user-${user.uid}-player-list`, jsonValue)
+            setPlayerList(docData)
+        } catch (e) {
+            console.error('Failed to get players', e);
+        }
+    }
+
     useEffect(() => {
         const getData = async () => {
             setLoading(true);
             try {
                 const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-player-list`);
-                setPlayerList(jsonValue != null ? JSON.parse(jsonValue) : []);
+                if (jsonValue !== null) {
+                    setPlayerList(JSON.parse(jsonValue));
+                } else {
+                    const db = getFirestore(firebaseApp);
+                    getPlayers(db);
+                }
             } catch(e) {
                 console.error('Error getting team', e);
             }

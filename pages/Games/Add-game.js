@@ -3,6 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, Image, TouchableOpacity, Alert, ImageBackground, ScrollView } from 'react-native';
 import GeneralStyles from '../../styles/General';
 import GameStyles from '../../styles/Games';
+import { getDocs, collection, getFirestore } from '@firebase/firestore/lite';
+import { firebaseApp } from '../../App';
 
 const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
     const [team, setTeam] = useState([]);
@@ -16,15 +18,37 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
     const [totalAssists, setTotalAssists] = useState(0);
     const [totalActiveSubs, setTotalActiveSubs] = useState(0);
 
+    const getTeam = async () => {
+        const userCollection = collection(db, 'users');
+        const documents = await getDocs(userCollection);
+        const allData = documents.docs.map(doc => doc.data())[0];
+
+        try {
+            const jsonValue = JSON.stringify(allData.team)
+            await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
+            setTeam(allData.team.team);
+            setInitialTeam(allData.team.team);
+            setSubs(allData.team.subs);
+            setInitialSubs(allData.team.subs);
+        } catch (e) {
+            console.error('Failed to get team', e);
+        }
+    }
+
     useEffect(() => {
         const getData = async () => {
             setLoading(true);
             try {
                 const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-team`);
-                setTeam(jsonValue != null ? JSON.parse(jsonValue).team : []);
-                setInitialTeam(jsonValue != null ? JSON.parse(jsonValue).team : []);
-                setSubs(jsonValue != null ? JSON.parse(jsonValue).subs : []);
-                setInitialSubs(jsonValue != null ? JSON.parse(jsonValue).subs : []);
+                if (jsonValue !== null) {
+                    setTeam(JSON.parse(jsonValue).team);
+                    setInitialTeam(JSON.parse(jsonValue).team);
+                    setSubs(JSON.parse(jsonValue).subs);
+                    setInitialSubs(JSON.parse(jsonValue).subs);
+                } else {
+                    const db = getFirestore(firebaseApp);
+                    getTeam(db);
+                }
             } catch(e) {
                 console.error('Error getting team', e);
             }

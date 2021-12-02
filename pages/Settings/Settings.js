@@ -51,7 +51,7 @@ const Settings = ({ user }) => {
         async function getGames(db) {
             const playerCollection = collection(db, 'players');
             const documents = await getDocs(playerCollection);
-            const docData = documents.docs.map(doc => doc.data());;
+            const docData = documents.docs.map(doc => doc.data());
             try {
                 const jsonValue = JSON.stringify(docData)
                 await AsyncStorage.setItem(`user-${user.uid}-player-list`, jsonValue)
