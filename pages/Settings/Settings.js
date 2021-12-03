@@ -8,20 +8,36 @@ import {
   import {
       getDocs,
       collection,
-      getFirestore
+      getFirestore,
+      updateDoc,
+      doc,
+      addDoc,
+      getDoc,
+      setDoc
      } from '@firebase/firestore/lite';
 import { firebaseApp } from '../../App';
 
-const Settings = ({ user }) => {
+const Settings = ({ user, auth }) => {
     const [isDeleting, setIsDeleting] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const removeAllData = async () => {
         try {
+            await updateDb()
+        } catch (e) {
+            console.error('Failed to update db', e);
+            Alert.alert(
+                "Cannot delete data",
+                "We could not update the database with your local data, so deleting the local data will lead to lost data."
+            );
+            return;
+        }
+        try {
             const dataKeys = [
                 `user-${user.uid}-all-time-games`,
                 `user-${user.uid}-all-time-player-stats`,
-                `user-${user.uid}-team`
+                `user-${user.uid}-team`,
+                `user-${user.uid}-subs`
             ];
             await AsyncStorage.multiRemove(dataKeys);
         } catch (e) {
@@ -64,7 +80,74 @@ const Settings = ({ user }) => {
         const db = getFirestore(firebaseApp)
         getGames(db);
     }
-    
+
+    const updateDb = async () => {
+        let localGames = [];
+        let localPlayerStats = [];
+        let localTeam = [];
+        let localSubs = [];
+        try {
+            const JSONValue = await AsyncStorage.getItem(`user-${user.uid}-all-time-games`)
+            if (JSONValue != null) {
+                localGames = JSON.parse(JSONValue);
+            }
+        } catch (e) {
+            console.error('Failed to get games', e);
+        }
+        try {
+            const JSONValue = await AsyncStorage.getItem(`user-${user.uid}-all-time-player-stats`)
+            if (JSONValue != null) {
+                localPlayerStats = JSON.parse(JSONValue);
+            }
+        } catch (e) {
+            console.error('Failed to get games', e);
+        }
+        try {
+            const JSONValue = await AsyncStorage.getItem(`user-${user.uid}-team`)
+            if (JSONValue != null) {
+                localTeam = JSON.parse(JSONValue);
+            }
+        } catch (e) {
+            console.error('Failed to get games', e);
+        }
+        try {
+            const JSONValue = await AsyncStorage.getItem(`user-${user.uid}-subs`)
+            if (JSONValue != null) {
+                localSubs = JSON.parse(JSONValue);
+            }
+        } catch (e) {
+            console.error('Failed to get games', e);
+        }
+        if (localGames === [] || localPlayerStats === [] || localTeam === [] || localSubs === []) {
+            Alert.alert(
+                "Something went wrong.",
+                "Not enough local storage found."
+                );
+                return;
+            } else {
+            const db = getFirestore(firebaseApp)
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+            const allData = docSnap.data();
+            if (allData) {
+                await updateDoc(doc(db, 'users', user.uid), {
+                    games: localGames,
+                    playerStats: localPlayerStats,
+                    team: localTeam,
+                    subs: localSubs
+                })
+            } else {
+                await setDoc(doc(db, 'users', user.uid), {
+                    games: localGames,
+                    playerStats: localPlayerStats,
+                    team: localTeam,
+                    subs: localSubs
+                })
+
+            }
+        }
+    }
+
     // Return statements
     if (isLoading) {
         return <View style={GeneralStyles.pageContainer}>
@@ -86,7 +169,10 @@ const Settings = ({ user }) => {
                     <TouchableOpacity onPress={() => updatePlayers()} >
                         <Text style={[GeneralStyles.button, GeneralStyles.greenButton]}>Update players</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={GeneralStyles.settingsButton} onPress={() => signOut()} >
+                    <TouchableOpacity style={GeneralStyles.settingsButton} onPress={() => updateDb()} >
+                        <Text style={[GeneralStyles.button, GeneralStyles.greenButton]}>Update database</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={GeneralStyles.settingsButton} onPress={() => signOut(auth)} >
                         <Text style={[GeneralStyles.button, GeneralStyles.blueButton]}>Sign out</Text>
                     </TouchableOpacity>
                 </View>

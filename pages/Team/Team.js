@@ -6,7 +6,7 @@ import GeneralStyles from '../../styles/General';
 import TeamStyles from '../../styles/Team';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import AddPlayer from './Add-player';
-import { getDocs, collection, getFirestore } from '@firebase/firestore/lite';
+import { getFirestore, getDoc, doc } from '@firebase/firestore/lite';
 import { firebaseApp } from '../../App';
 
 const Team = ({ user, navigation }) => {
@@ -14,26 +14,43 @@ const Team = ({ user, navigation }) => {
     const [subs, setSubs] = useState([]);
     const [showingStats, setShowingStats] = useState(false);
     const [addingPlayer, setAddingPlayer] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [replacingPlayer, setReplacingPlayer] = useState(null);
     const [isNewPlayerSub, setIsNewPlayerSub] = useState(false);
     const [teamHasGoalKeeper, setTeamHasGoalKeeper] = useState(false);
 
-    const getTeam = async () => {
-        const userCollection = collection(db, 'users');
-        const documents = await getDocs(userCollection);
-        const allData = documents.docs.map(doc => doc.data())[0];
-
+    const getTeam = async (db) => {
         try {
-            const jsonValue = JSON.stringify(allData.team)
-            await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
-            if (allData.team.team.length === 11) {
-                setTeamHasGoalKeeper(true);
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+            const allData = docSnap.data();
+            if (allData) {
+                const jsonValue = JSON.stringify(allData.team)
+                await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue);
+                if (allData.team.length === 11) {
+                    setTeamHasGoalKeeper(true);
+                }
+                const newTeam = allData.team.sort((a, b) => a.position > b.position ? 1 : -1);
+                setTeam(newTeam);
             }
-            setTeam(allData.team.team);
-            setSubs(allData.team.subs);
         } catch (e) {
             console.error('Failed to get team', e);
+        }
+    }
+
+    const getSubs = async (db) => {
+        try {
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+            const allData = docSnap.data();
+            if (allData) {
+                const jsonValue = JSON.stringify(allData.subs)
+                await AsyncStorage.setItem(`user-${user.uid}-subs`, jsonValue);
+                const newSubs = allData.subs.sort((a, b) => a.position > b.position ? 1 : -1);
+                setSubs(newSubs);
+            }
+        } catch (e) {
+            console.error('Failed to get subs', e);
         }
     }
  
@@ -43,19 +60,36 @@ const Team = ({ user, navigation }) => {
             try {
                 const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-team`);
                 if (jsonValue !== null) {
-                    if (JSON.parse(jsonValue).team.length === 11) {
+                    if (JSON.parse(jsonValue).length === 11) {
                         setTeamHasGoalKeeper(true);
                     }
-                    setTeam(JSON.parse(jsonValue).team);
-                    setSubs(JSON.parse(jsonValue).subs);
+                    const newTeam = JSON.parse(jsonValue).sort((a, b) => a.position > b.position ? 1 : -1);
+                    setTeam(newTeam);
+                    setLoading(false);
                 } else {
                     const db = getFirestore(firebaseApp);
-                    getTeam(db);
+                    await getTeam(db);
+                    setLoading(false);
                 }
             } catch(e) {
                 console.error('Error getting team', e);
+                setLoading(false);
             }
-            setLoading(false);
+            try {
+                const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-subs`);
+                if (jsonValue !== null) {
+                    const newSubs = JSON.parse(jsonValue).sort((a, b) => a.position > b.position ? 1 : -1);
+                    setSubs(newSubs);
+                    setLoading(false);
+                } else {
+                    const db = getFirestore(firebaseApp);
+                    await getSubs(db);
+                    setLoading(false);
+                }
+            } catch(e) {
+                console.error('Error getting subs', e);
+                setLoading(false);
+            }
         }
         getData();
 
@@ -178,7 +212,7 @@ const Team = ({ user, navigation }) => {
 
     // Return statements
     if (loading) {
-        return <Text style={GeneralStyles.paragraph}>Loading...</Text>;
+        return <View style={GeneralStyles.pageContainer}><Text style={GeneralStyles.paragraph}>Loading...</Text></View>;
     }
 
     return (

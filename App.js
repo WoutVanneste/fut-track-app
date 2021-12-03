@@ -64,7 +64,7 @@ const App = () => {
   };
 
   return (
-    <Navigation user={user}/>
+    <Navigation user={user} auth={auth}/>
   );
 }
 

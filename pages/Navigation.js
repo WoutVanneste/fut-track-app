@@ -10,8 +10,7 @@ import { View, Text } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
-const Navigation = ({ user }) => {
-    console.log('navigation comp - user:', user);
+const Navigation = ({ user, auth }) => {
     return (
       <NavigationContainer>
         <Tab.Navigator
@@ -78,7 +77,7 @@ const Navigation = ({ user }) => {
               </View>
               )
             }}>
-              {props => <Settings {...props} user={user}/>}
+              {props => <Settings {...props} user={user} auth={auth}/>}
           </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>

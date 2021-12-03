@@ -9,10 +9,10 @@ import { firebaseApp } from '../../App';
 
 const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs, isNewPlayerSub, teamHasGoalKeeper, setTeamHasGoalKeeper }) => {
     const [playerList, setPlayerList] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [playerSearch, setPlayerSearch] = useState("");
 
-    const getPlayers = async () => {
+    const getPlayers = async (db) => {
         const playerCollection = collection(db, 'players');
         const documents = await getDocs(playerCollection);
         const docData = documents.docs.map(doc => doc.data());
@@ -32,14 +32,16 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
                 const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-player-list`);
                 if (jsonValue !== null) {
                     setPlayerList(JSON.parse(jsonValue));
+                    setLoading(false);
                 } else {
                     const db = getFirestore(firebaseApp);
-                    getPlayers(db);
+                    await getPlayers(db);
+                    setLoading(false);
                 }
             } catch(e) {
                 console.error('Error getting team', e);
+                setLoading(false);
             }
-            setLoading(false);
         }
         getData();
 
@@ -53,6 +55,7 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
 
     const replacePlayer = newPlayer => {
         if (!player) {
+            // Add position of old player or length of player list
             const newPlayerObject = {
                 assists: 0,
                 cleanSheets: 0,
@@ -67,6 +70,7 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
                 name: newPlayer.name,
                 rating: newPlayer.rating,
                 searchName: newPlayer.searchName,
+                position: team.length
             }
             if (isNewPlayerSub) {
                 let newSubs = subs;
@@ -75,15 +79,17 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
                 }
                 newSubs.push(newPlayerObject);
                 const saveLocalData = async () => {
-                    const fullTeam = {
-                        team: team,
-                        subs: newSubs
-                    };
                     try {
-                        const jsonValue = JSON.stringify(fullTeam)
+                        const jsonValue = JSON.stringify(team)
                         await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
                     } catch (e) {
                         console.error('Failed to save team', e);
+                    }
+                    try {
+                        const jsonValue = JSON.stringify(subs)
+                        await AsyncStorage.setItem(`user-${user.uid}-subs`, jsonValue)
+                    } catch (e) {
+                        console.error('Failed to save subs', e);
                     }
                 }
                 saveLocalData();
@@ -95,15 +101,17 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
                 }
                 newTeam.push(newPlayerObject);
                 const saveLocalData = async () => {
-                    const fullTeam = {
-                        team: newTeam,
-                        subs: subs
-                    };
                     try {
-                        const jsonValue = JSON.stringify(fullTeam)
+                        const jsonValue = JSON.stringify(team)
                         await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
                     } catch (e) {
                         console.error('Failed to save team', e);
+                    }
+                    try {
+                        const jsonValue = JSON.stringify(subs)
+                        await AsyncStorage.setItem(`user-${user.uid}-subs`, jsonValue)
+                    } catch (e) {
+                        console.error('Failed to save subs', e);
                     }
                 }
                 saveLocalData();
@@ -112,6 +120,7 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
             setAddingPlayer(false);
             return;
         } else {
+            // Add position of old player or length of player list
             const newPlayerObject = {
                 assists: 0,
                 cleanSheets: 0,
@@ -126,6 +135,7 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
                 name: newPlayer.name,
                 rating: newPlayer.rating,
                 searchName: newPlayer.searchName,
+                position: player.position
             }
             if (containsObject(player, team)) {
                 let newTeam = team;
@@ -135,15 +145,17 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
                 }
                 newTeam[index] = newPlayerObject;
                 const saveLocalData = async () => {
-                    const fullTeam = {
-                        team: newTeam,
-                        subs: subs
-                    };
                     try {
-                        const jsonValue = JSON.stringify(fullTeam)
+                        const jsonValue = JSON.stringify(team)
                         await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
                     } catch (e) {
                         console.error('Failed to save team', e);
+                    }
+                    try {
+                        const jsonValue = JSON.stringify(subs)
+                        await AsyncStorage.setItem(`user-${user.uid}-subs`, jsonValue)
+                    } catch (e) {
+                        console.error('Failed to save subs', e);
                     }
                 }
                 saveLocalData();
@@ -159,15 +171,17 @@ const AddPlayer = ({user, player, setAddingPlayer, team, subs, setTeam, setSubs,
                 }
                 newSubs[index] = newPlayerObject;
                 const saveLocalData = async () => {
-                    const fullTeam = {
-                        team: team,
-                        subs: newSubs
-                    };
                     try {
-                        const jsonValue = JSON.stringify(fullTeam)
+                        const jsonValue = JSON.stringify(team)
                         await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
                     } catch (e) {
                         console.error('Failed to save team', e);
+                    }
+                    try {
+                        const jsonValue = JSON.stringify(subs)
+                        await AsyncStorage.setItem(`user-${user.uid}-subs`, jsonValue)
+                    } catch (e) {
+                        console.error('Failed to save subs', e);
                     }
                 }
     

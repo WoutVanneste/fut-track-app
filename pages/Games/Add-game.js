@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, Image, TouchableOpacity, Alert, ImageBackground, ScrollView } from 'react-native';
 import GeneralStyles from '../../styles/General';
 import GameStyles from '../../styles/Games';
-import { getDocs, collection, getFirestore } from '@firebase/firestore/lite';
+import { getFirestore, getDoc, doc } from '@firebase/firestore/lite';
 import { firebaseApp } from '../../App';
 
 const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
@@ -11,27 +11,44 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
     const [subs, setSubs] = useState([]);
     const [initialTeam, setInitialTeam] = useState([]);
     const [initialSubs, setInitialSubs] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [motm, setMotm] = useState(0);
     const [awayGoals, setAwayGoals] = useState(0);
     const [totalGoals, setTotalGoals] = useState(0);
     const [totalAssists, setTotalAssists] = useState(0);
     const [totalActiveSubs, setTotalActiveSubs] = useState(0);
 
-    const getTeam = async () => {
-        const userCollection = collection(db, 'users');
-        const documents = await getDocs(userCollection);
-        const allData = documents.docs.map(doc => doc.data())[0];
-
+    const getTeam = async (db) => {
         try {
-            const jsonValue = JSON.stringify(allData.team)
-            await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue)
-            setTeam(allData.team.team);
-            setInitialTeam(allData.team.team);
-            setSubs(allData.team.subs);
-            setInitialSubs(allData.team.subs);
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+            const allData = docSnap.data();
+            if (allData) {
+                const jsonValue = JSON.stringify(allData.team)
+                await AsyncStorage.setItem(`user-${user.uid}-team`, jsonValue);
+                const newTeam = allData.team.sort((a, b) => a.position > b.position ? 1 : -1);
+                setTeam(newTeam);
+                setInitialTeam(newTeam);
+            }
         } catch (e) {
             console.error('Failed to get team', e);
+        }
+    }
+
+    const getSubs = async (db) => {
+        try {
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+            const allData = docSnap.data();
+            if (allData) {
+                const jsonValue = JSON.stringify(allData.subs)
+                await AsyncStorage.setItem(`user-${user.uid}-subs`, jsonValue);
+                const newSubs = allData.subs.sort((a, b) => a.position > b.position ? 1 : -1)
+                setSubs(newSubs);
+                setInitialSubs(newSubs);
+            }
+        } catch (e) {
+            console.error('Failed to get subs', e);
         }
     }
 
@@ -41,18 +58,35 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
             try {
                 const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-team`);
                 if (jsonValue !== null) {
-                    setTeam(JSON.parse(jsonValue).team);
-                    setInitialTeam(JSON.parse(jsonValue).team);
-                    setSubs(JSON.parse(jsonValue).subs);
-                    setInitialSubs(JSON.parse(jsonValue).subs);
+                    const newTeam = JSON.parse(jsonValue).sort((a, b) => a.position > b.position ? 1 : -1)
+                    setTeam(newTeam);
+                    setInitialTeam(newTeam);
+                    setLoading(false);
                 } else {
                     const db = getFirestore(firebaseApp);
-                    getTeam(db);
+                    await getTeam(db);
+                    setLoading(false);
                 }
             } catch(e) {
                 console.error('Error getting team', e);
+                setLoading(false);
             }
-            setLoading(false);
+            try {
+                const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-subs`);
+                if (jsonValue !== null) {
+                    const newSubs = JSON.parse(jsonValue).sort((a, b) => a.position > b.position ? 1 : -1)
+                    setSubs(newSubs);
+                    setInitialSubs(newSubs);
+                    setLoading(false);
+                } else {
+                    const db = getFirestore(firebaseApp);
+                    await getSubs(db);
+                    setLoading(false);
+                }
+            } catch(e) {
+                console.error('Error getting subs', e);
+                setLoading(false);
+            }
         }
         getData();
 

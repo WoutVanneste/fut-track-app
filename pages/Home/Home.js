@@ -4,7 +4,7 @@ import { ScrollView, Text, View, Image, ImageBackground } from 'react-native';
 import GeneralStyles from '../../styles/General';
 import HomeStyles from '../../styles/Home';
 import styled from 'styled-components/native';
-import { getDocs, collection, getFirestore } from '@firebase/firestore/lite';
+import { getFirestore, getDoc, doc } from '@firebase/firestore/lite';
 import { firebaseApp } from '../../App';
 
 const StyledBar = styled.View`
@@ -62,74 +62,73 @@ const StyledBarConceded = styled.View`
 const Home = ({ user, navigation }) => {
     const [allTimeGames, setAllTimeGames] = useState([]);
     const [allTimePlayerStats, setAllTimePlayerStats] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const getAllTimeGames = async (db) => {
-        const userCollection = collection(db, 'users');
-        const documents = await getDocs(userCollection);
-        const allData = documents.docs.map(doc => doc.data())[0];
-
         try {
-            const jsonValue = JSON.stringify(allData.games)
-            await AsyncStorage.setItem(`user-${user.uid}-all-time-games`, jsonValue)
-            setAllTimeGames(allData.games);
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+            const allData = docSnap.data();
+            if (allData) {
+                setAllTimeGames(allData.games);
+                const jsonValue = JSON.stringify(allData.games)
+                await AsyncStorage.setItem(`user-${user.uid}-all-time-games`, jsonValue);
+            }
         } catch (e) {
             console.error('Failed to get games', e);
         }
     }
 
     const getAllTimePlayerStats = async (db) => {
-        const userCollection = collection(db, 'users');
-        const documents = await getDocs(userCollection);
-        const allData = documents.docs.map(doc => doc.data())[0];
-
         try {
-            const jsonValue = JSON.stringify(allData.playerStats)
-            await AsyncStorage.setItem(`user-${user.uid}-all-time-player-stats`, jsonValue)
-            setAllTimeGames(allData.playerStats);
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+            const allData = docSnap.data();
+            if (allData) {
+                setAllTimePlayerStats(allData.playerStats);
+                const jsonValue = JSON.stringify(allData.playerStats)
+                await AsyncStorage.setItem(`user-${user.uid}-all-time-player-stats`, jsonValue);
+            }
         } catch (e) {
             console.error('Failed to get player stats', e);
         }
     }
 
     useEffect(() => {
+        setLoading(true);
         const getData = async () => {
-            setLoading(true);
             try {
                 const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-all-time-games`);
                 if (jsonValue !== null) {
                     setAllTimeGames(JSON.parse(jsonValue));
+                    setLoading(false);
                 } else {
                     const db = getFirestore(firebaseApp);
-                    getAllTimeGames(db);
+                    await getAllTimeGames(db);
+                    setLoading(false);
                 }
-                setAllTimeGames(jsonValue !== null ? JSON.parse(jsonValue) : []);
             } catch(e) {
                 console.error('Error getting all time games', e);
+                setLoading(false);
             }
             try {
                 const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-all-time-player-stats`);
                 if (jsonValue !== null) {
                     setAllTimePlayerStats(JSON.parse(jsonValue));
+                    setLoading(false);
                 } else {
                     const db = getFirestore(firebaseApp);
-                    getAllTimePlayerStats(db);
+                    await getAllTimePlayerStats(db);
+                    setLoading(false);
                 }
             } catch(e) {
                 console.error('Error getting all time player stats', e);
+                setLoading(false);
             }
-            setLoading(false);
+            
         }
+        
         getData();
-        navigation.addListener('focus', () => { 
-            getData();
-        });
-
-        navigation.addListener('blur', () => { 
-            setAllTimeGames([]);
-            setAllTimePlayerStats([]);
-            setLoading(false);
-         });
     }, []);
 
     const renderRecord = () => {
@@ -340,7 +339,7 @@ const Home = ({ user, navigation }) => {
 
     // Return statements
     if (loading) {
-        return <Text style={GeneralStyles.paragraph}>Loading...</Text>;
+        return <View style={GeneralStyles.pageContainer}><Text style={GeneralStyles.paragraph}>Loading...</Text></View>;
     };
 
     return (

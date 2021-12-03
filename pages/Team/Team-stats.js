@@ -8,16 +8,15 @@ import { firebaseApp } from '../../App';
 
 const TeamStats = ({user}) => {
     const [allTimePlayerStats, setAllTimePlayerStats] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const getAllTimePlayerStats = async () => {
-        const userCollection = collection(db, 'users');
-        const documents = await getDocs(userCollection);
-        const allData = documents.docs.map(doc => doc.data())[0];
-
         try {
+            const userCollection = collection(db, 'users');
+            const documents = await getDocs(userCollection);
+            const allData = documents.docs.map(doc => doc.data())[0];
             const jsonValue = JSON.stringify(allData.playerStats)
-            await AsyncStorage.setItem(`user-${user.uid}-all-time-games`, jsonValue)
+            await AsyncStorage.setItem(`user-${user.uid}-all-time-player-stats`, jsonValue)
             setAllTimePlayerStats(allData.playerStats);
         } catch (e) {
             console.error('Failed to get player stats', e);
@@ -31,14 +30,16 @@ const TeamStats = ({user}) => {
                 const jsonValue = await AsyncStorage.getItem(`user-${user.uid}-all-time-player-stats`);
                 if (jsonValue !== null) {
                     setAllTimePlayerStats(JSON.parse(jsonValue));
+                    setLoading(false);
                 } else {
                     const db = getFirestore(firebaseApp);
-                    getAllTimePlayerStats(db);
+                    await getAllTimePlayerStats(db);
+                    setLoading(false);
                 }
             } catch(e) {
                 console.error('Error getting all time stats', e);
+                setLoading(false);
             }
-            setLoading(false);
         }
         getData();
 
