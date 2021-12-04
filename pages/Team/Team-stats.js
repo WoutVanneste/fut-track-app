@@ -42,9 +42,6 @@ const TeamStats = ({user}) => {
             }
         }
         getData();
-
-         // Clear any data when leaving the add page
-         return () => {}
     }, []);
 
     const renderStats = () => {

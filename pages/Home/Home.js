@@ -128,7 +128,15 @@ const Home = ({ user, navigation }) => {
             
         }
         
-        getData();
+        navigation.addListener('focus', () => {
+            getData();
+        });
+        
+        navigation.addListener('blur', () => {
+            setAllTimeGames([]);
+            setAllTimePlayerStats([]);
+            setLoading(false);
+        });
     }, []);
 
     const renderRecord = () => {

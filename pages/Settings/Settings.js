@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, Alert, TouchableOpacity } from 'react-native';
 import GeneralStyles from '../../styles/General';
@@ -17,7 +17,7 @@ import {
      } from '@firebase/firestore/lite';
 import { firebaseApp } from '../../App';
 
-const Settings = ({ user, auth }) => {
+const Settings = ({ user, auth, navigation }) => {
     const [isDeleting, setIsDeleting] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -147,6 +147,13 @@ const Settings = ({ user, auth }) => {
             }
         }
     }
+
+    useEffect(() => {
+        navigation.addListener('blur', () => {
+            setIsDeleting(false);
+            setIsLoading(false);
+        })
+    }, [])
 
     // Return statements
     if (isLoading) {

@@ -89,20 +89,6 @@ const AddGame = ({ allTimePlayerStats, allTimeGames, setAddingGame, user }) => {
             }
         }
         getData();
-
-        // Clear any data when leaving the add page
-        return () => {
-            setTeam([]);
-            setSubs([]);
-            setInitialTeam([]);
-            setInitialSubs([]);
-            setLoading(false);
-            setMotm(0);
-            setAwayGoals(0);
-            setTotalGoals(0);
-            setTotalAssists(0);
-            setTotalActiveSubs(0);
-        };
     }, []);
 
     

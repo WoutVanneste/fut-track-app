@@ -91,7 +91,6 @@ const Team = ({ user, navigation }) => {
                 setLoading(false);
             }
         }
-        getData();
 
         navigation.addListener('focus', () => {
             getData();
@@ -102,8 +101,10 @@ const Team = ({ user, navigation }) => {
             setSubs([]);
             setShowingStats(false);
             setAddingPlayer(false);
+            setLoading(true);
             setReplacingPlayer(null);
-            setLoading(false);
+            setIsNewPlayerSub(false);
+            setTeamHasGoalKeeper(false);
         });
     }, []);
 

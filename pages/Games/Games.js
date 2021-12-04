@@ -76,7 +76,6 @@ const Games = ({ navigation, user }) => {
             }
             
         }
-        getData();
 
         navigation.addListener('focus', () => { 
             getData();
